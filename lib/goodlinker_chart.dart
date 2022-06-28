@@ -1,7 +1,7 @@
 library goodlinker_chart;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export './TimestampXAxisLineChart.dart';
+export './TimestampXAxisBarChart.dart';
+export './common/entry/ChartRuleLine.dart';
+export './common/entry/TimestampXAxisData.dart';
+export './common/entry/TimestampXAxisDataSet.dart';
