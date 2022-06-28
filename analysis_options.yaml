@@ -1,0 +1,9 @@
+# include: package:flutter_lints/flutter.yaml
+include: package:lints/recommended.yaml
+linter:
+  rules:
+    avoid_shadowing_type_parameters: false
+    await_only_futures: true
+    lowercase_with_underscores: false
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
