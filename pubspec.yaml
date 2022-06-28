@@ -1,7 +1,7 @@
 name: goodlinker_chart
-description: A new Flutter package project.
+description: A chart package which have colored mask area.
 version: 0.0.1
-homepage: 
+homepage: https://github.com/triplehman3563/goodlinker_chart
 
 environment:
   sdk: ">=2.17.3 <3.0.0"
