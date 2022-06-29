@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:goodlinker_chart/usecases/ApplyPaddingUsecase.dart';
+import 'package:goodlinker_chart/src/usecases/ApplyPaddingUsecase.dart';
 
 void main() {
   testWidgets('ApplyPaddingUsecase ...', (tester) async {

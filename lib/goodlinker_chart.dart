@@ -1,7 +1,10 @@
 library goodlinker_chart;
 
-export './TimestampXAxisLineChart.dart';
-export './TimestampXAxisBarChart.dart';
-export './common/entry/ChartRuleLine.dart';
-export './common/entry/TimestampXAxisData.dart';
-export './common/entry/TimestampXAxisDataSet.dart';
+export 'src/TimestampXAxisLineChart.dart';
+export 'src/TimestampXAxisBarChart.dart';
+export 'entry/ChartRuleLine.dart';
+export 'entry/TimestampXAxisData.dart';
+export 'entry/TimestampXAxisDataSet.dart';
+
+
+

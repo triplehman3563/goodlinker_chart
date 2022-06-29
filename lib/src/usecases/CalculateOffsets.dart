@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/common/entry/TimestampXAxisDataSet.dart';
-import 'package:goodlinker_chart/usecases/ApplyPaddingUsecase.dart';
-import 'package:goodlinker_chart/usecases/CoordinateTransferUsecase.dart';
+import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
+import 'package:goodlinker_chart/src/usecases/ApplyPaddingUsecase.dart';
+import 'package:goodlinker_chart/src/usecases/CoordinateTransferUsecase.dart';
 
 class CalculateOffsets {
   TimestampXAxisDataSet calculateOffsets({

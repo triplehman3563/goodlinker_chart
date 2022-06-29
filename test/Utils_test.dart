@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:goodlinker_chart/Utils.dart';
+import 'package:goodlinker_chart/src/Utils.dart';
 
 void main() {
   testWidgets('Utils ...', (tester) async {

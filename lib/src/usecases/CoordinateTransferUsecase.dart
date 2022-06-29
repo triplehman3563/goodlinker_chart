@@ -1,10 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/Utils.dart';
-import 'package:goodlinker_chart/common/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/common/entry/TimestampXAxisData.dart';
-import 'package:goodlinker_chart/common/entry/TimestampXAxisDataSet.dart';
+import 'package:goodlinker_chart/src/Utils.dart';
+import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
 
 class CoordinateTransferUsecase {
   TimestampXAxisDataSet transferToCanvasCoor({
@@ -26,7 +26,7 @@ class CoordinateTransferUsecase {
 
     final xMax = offsets.map((e) => e.dx).toList().max();
     final xMin = offsets.map((e) => e.dx).toList().min();
-    final xRange = xMax - xMin;
+    final xRange = dataSet.xAxisEndPoint - dataSet.xAxisStartPoint;
     final yMax = yDataSets.max();
     final yMin = yDataSets.min();
     final yRange = yMax - yMin;
@@ -43,18 +43,18 @@ class CoordinateTransferUsecase {
       xAxisStartPoint: dataSet.xAxisStartPoint,
       xAxisEndPoint: dataSet.xAxisEndPoint,
       upperBaseline: upperBaseline != null
-          ? ChartRuleline(
+          ? ChartBaseline(
               dy: canvasSize.height +
                   padding.top +
                   (upperBaseline.dy - yMin) * -yRatio,
-              baselineColor: dataSet.upperBaseline?.baselineColor)
+            )
           : null,
       lowerBaseline: lowerBaseline != null
-          ? ChartRuleline(
+          ? ChartBaseline(
               dy: canvasSize.height +
                   padding.top +
                   (lowerBaseline.dy - yMin) * -yRatio,
-              baselineColor: dataSet.lowerBaseline?.baselineColor)
+            )
           : null,
     );
   }
