@@ -1,9 +1,11 @@
 // ignore_for_file: file_names
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:goodlinker_chart/usecases/CalculateOffsets.dart';
+import 'package:goodlinker_chart/src/usecases/CalculateOffsets.dart';
 
-import '../TestData.dart';
+import '../../TestData.dart';
+
+
 
 void main() {
   testWidgets('CalculateOffsets ...', (tester) async {

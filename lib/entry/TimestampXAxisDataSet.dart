@@ -1,17 +1,18 @@
 // ignore_for_file: file_names
 
 import 'package:equatable/equatable.dart';
-import 'package:goodlinker_chart/common/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/common/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
 
 class TimestampXAxisDataSet extends Equatable {
   final List<TimestampXAxisData> data;
   final int xAxisStartPoint;
   final int xAxisEndPoint;
-  final ChartRuleline? upperBaseline;
-  final ChartRuleline? lowerBaseline;
+  final ChartBaseline? upperBaseline;
+  final ChartBaseline? lowerBaseline;
 
   TimestampXAxisDataSet({
+    // Data which shows on chart
     required this.data,
     required this.xAxisStartPoint,
     required this.xAxisEndPoint,
@@ -23,8 +24,8 @@ class TimestampXAxisDataSet extends Equatable {
     List<TimestampXAxisData>? data,
     int? xAxisStartPoint,
     int? xAxisEndPoint,
-    ChartRuleline? upperBaseline,
-    ChartRuleline? lowerBaseline,
+    ChartBaseline? upperBaseline,
+    ChartBaseline? lowerBaseline,
   }) =>
       TimestampXAxisDataSet(
         data: data ?? this.data,

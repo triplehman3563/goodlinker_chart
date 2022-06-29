@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/FakeData.dart';
-import 'package:goodlinker_chart/TimestampXAxisBarChart.dart';
-import 'package:goodlinker_chart/TimestampXAxisLineChart.dart';
-import 'package:goodlinker_chart/common/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/common/entry/TimestampXAxisData.dart';
-import 'package:goodlinker_chart/common/entry/TimestampXAxisDataSet.dart';
+import 'package:goodlinker_chart/src/FakeData.dart';
+import 'package:goodlinker_chart/src/TimestampXAxisBarChart.dart';
+import 'package:goodlinker_chart/src/TimestampXAxisLineChart.dart';
+import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
 
 void main() {
   runApp(const MyApp());
@@ -68,9 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         xAxisEndPoint: 1655071200 +
                             simulatedItemNumber * simulatedDataInterval,
                         // baseline: [350, 400],
-                        upperBaseline: const ChartRuleline(
+                        upperBaseline: const ChartBaseline(
                             dy: 400, baselineColor: Colors.red),
-                        lowerBaseline: const ChartRuleline(
+                        lowerBaseline: const ChartBaseline(
                             dy: 350, baselineColor: Colors.red),
                       ),
                     ),
@@ -93,9 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         xAxisEndPoint: 1655071200 +
                             simulatedItemNumber * simulatedDataInterval,
                         // baseline: [350, 400],
-                        upperBaseline: const ChartRuleline(
+                        upperBaseline: const ChartBaseline(
                             dy: 400, baselineColor: Colors.red),
-                        lowerBaseline: const ChartRuleline(
+                        lowerBaseline: const ChartBaseline(
                             dy: 350, baselineColor: Colors.red),
                       ),
                     ),
@@ -134,9 +134,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       y: fakeData[index % fakeData.length]);
                                 }).toList(),
                                 // baseline: [350, 400],
-                                upperBaseline: const ChartRuleline(
+                                upperBaseline: const ChartBaseline(
                                     dy: 400, baselineColor: Colors.red),
-                                lowerBaseline: const ChartRuleline(
+                                lowerBaseline: const ChartBaseline(
                                     dy: 350, baselineColor: Colors.red),
                                 xAxisStartPoint: 1655071200,
                                 xAxisEndPoint: 1655071200 +
