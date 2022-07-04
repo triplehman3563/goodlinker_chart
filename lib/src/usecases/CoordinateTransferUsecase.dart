@@ -24,7 +24,6 @@ class CoordinateTransferUsecase {
       yDataSets.add(lowerBaseline.dy);
     }
 
-    final xMax = offsets.map((e) => e.dx).toList().max();
     final xMin = offsets.map((e) => e.dx).toList().min();
     final xRange = dataSet.xAxisEndPoint - dataSet.xAxisStartPoint;
     final yMax = yDataSets.max();
