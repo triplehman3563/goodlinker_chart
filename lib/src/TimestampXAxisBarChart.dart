@@ -1,11 +1,11 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
 import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
 import 'package:goodlinker_chart/src/TimestampXAxisChartBase.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
-import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
 import 'package:goodlinker_chart/src/usecases/ApplyPaddingUsecase.dart';
 import 'package:goodlinker_chart/src/usecases/CalculateOffsets.dart';
 import 'package:goodlinker_chart/style/BarChartStyle.dart';
@@ -122,8 +122,8 @@ class _TimestampXAxisBarChartPainter extends CustomPainter {
       ..strokeWidth = style.baseLineStyle.width
       ..style = PaintingStyle.fill;
     final normalAreaPaint = Paint()..color = style.normalAreaColor;
-    final Offset _originPoint = _getGraphAreaOriginOffset(size: size);
-    final Size _drawingArea = _getGraphAreaSize(size: size);
+    final Offset originPoint = _getGraphAreaOriginOffset(size: size);
+    final Size drawingArea = _getGraphAreaSize(size: size);
 // draw lower
     final newDataSet = CalculateOffsets().calculateOffsets(
         canvasSize: size,
@@ -131,12 +131,12 @@ class _TimestampXAxisBarChartPainter extends CustomPainter {
         padding: EdgeInsets.fromLTRB(horizontalPadding, verticalPadding,
             horizontalPadding, verticalPadding),
         xAxisHeight: xAxisHeight);
-    ChartBaseline? _lowerBaseline = newDataSet.lowerBaseline;
-    if (_lowerBaseline != null) {
-      final double lowerRuleLineY = _lowerBaseline.dy;
+    ChartBaseline? lowerBaseline = newDataSet.lowerBaseline;
+    if (lowerBaseline != null) {
+      final double lowerRuleLineY = lowerBaseline.dy;
       canvas.drawRect(
           Rect.fromPoints(
-            Offset(0, _originPoint.dy + verticalPadding),
+            Offset(0, originPoint.dy + verticalPadding),
             Offset(size.width, lowerRuleLineY),
           ),
           limitAreaPaint);
@@ -148,15 +148,15 @@ class _TimestampXAxisBarChartPainter extends CustomPainter {
       );
     }
     // draw upper
-    ChartBaseline? _upperBaseline = newDataSet.upperBaseline;
-    if (_upperBaseline != null) {
-      final double upperRuleLineY = _upperBaseline.dy;
+    ChartBaseline? upperBaseline = newDataSet.upperBaseline;
+    if (upperBaseline != null) {
+      final double upperRuleLineY = upperBaseline.dy;
       canvas.drawRRect(
           RRect.fromRectAndRadius(
             Rect.fromPoints(
               Offset(
                 0,
-                _originPoint.dy - _drawingArea.height - verticalPadding,
+                originPoint.dy - drawingArea.height - verticalPadding,
               ),
               Offset(size.width, upperRuleLineY),
             ),
@@ -176,11 +176,11 @@ class _TimestampXAxisBarChartPainter extends CustomPainter {
             Offset(
                 0,
                 newDataSet.upperBaseline?.dy ??
-                    (_originPoint.dy - _drawingArea.height - verticalPadding)),
+                    (originPoint.dy - drawingArea.height - verticalPadding)),
             Offset(
                 size.width,
                 newDataSet.lowerBaseline?.dy ??
-                    (_originPoint.dy + verticalPadding)),
+                    (originPoint.dy + verticalPadding)),
           ),
           Radius.circular(10),
         ),
