@@ -34,7 +34,7 @@ class CoordinateTransferUsecase {
     return TimestampXAxisDataSet(
       data: offsets.map((e) {
         final result = e
-            .translate(-xMin, -yMin)
+            .translate(-dataSet.xAxisStartPoint.toDouble(), -yMin)
             .scale(xRatio, -yRatio)
             .translate(padding.left, canvasSize.height + padding.top);
         return TimestampXAxisData(x: result.dx.toInt(), y: result.dy);
