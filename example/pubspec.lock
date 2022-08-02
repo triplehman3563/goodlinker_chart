@@ -101,7 +101,7 @@ packages:
       path: "/Users/ming.chen/Desktop/workspace/goodlinker_chart"
       relative: false
     source: path
-    version: "0.0.8"
+    version: "0.0.9"
   lints:
     dependency: transitive
     description:
