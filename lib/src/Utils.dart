@@ -17,5 +17,5 @@ extension FindDoubleListMax on List<double> {
 extension DateTimeFormatpr on DateTime {
   String hourMinuteString() => minute == 0
       ? '$hour時'
-      : '${hour >= 12 ? '$hour' : '0$hour'}:${minute >= 10 ? '$minute' : '0$minute'}';
+      : '${hour >= 10 ? '$hour' : '0$hour'}:${minute >= 10 ? '$minute' : '0$minute'}';
 }

@@ -1,14 +1,14 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, file_names
 
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
+import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisDataSet.dart';
 import 'package:goodlinker_chart/src/TimestampXAxisChartBase.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
 import 'package:goodlinker_chart/src/usecases/ApplyPaddingUsecase.dart';
 import 'package:goodlinker_chart/src/usecases/CalculateOffsets.dart';
-import 'package:goodlinker_chart/style/LineChartStyle.dart';
+import 'package:goodlinker_chart/src/style/LineChartStyle.dart';
 
 class TimestampXAxisLineChart extends StatefulWidget {
   final LineChartStyle style;
@@ -211,9 +211,7 @@ class _TimestampXAxisLineChartPainter extends CustomPainter {
         }
         try {
           canvas.drawLine(srcOffset, tarOffset, safeAreaLinePaint);
-        } catch (err, s) {
-          print(err);
-          print(s);
+        } catch (err) {
           continue;
         }
         // *********
@@ -403,8 +401,10 @@ class _TimestampXAxisLineChartPainter extends CustomPainter {
       ..strokeWidth = 1;
     final canvasSize = ApplyPaddingUsecase().applyPadding(
         canvasSize: size, padding: padding, xAxisHeight: xAxisHeight);
-    canvas.drawLine(Offset(padding.left+ canvasSize.width / 2, size.height - xAxisHeight),
-        Offset(size.width / 2, 0), aimLinePaint);
+    canvas.drawLine(
+        Offset(padding.left + canvasSize.width / 2, size.height - xAxisHeight),
+        Offset(size.width / 2, 0),
+        aimLinePaint);
   }
 
   @override

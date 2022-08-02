@@ -1,6 +1,6 @@
 name: goodlinker_chart
 description: A Flutter plugin for creating charts with colored mask area and time xAxis on Android and iOS.
-version: 0.0.5
+version: 0.0.7
 homepage: https://github.com/triplehman3563/goodlinker_chart
 
 environment:
