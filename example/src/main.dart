@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodlinker_chart/goodlinker_chart.dart';
 import 'package:goodlinker_chart/src/FakeData.dart';
-import 'package:goodlinker_chart/style/BarChartStyle.dart';
-import 'package:goodlinker_chart/style/LineChartStyle.dart';
 
 void main() {
   runApp(MyApp());
