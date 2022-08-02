@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
-import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
+import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisDataSet.dart';
 
 class CoordinateTransferUsecase {
   TimestampXAxisDataSet transferToCanvasCoor({
@@ -24,7 +24,6 @@ class CoordinateTransferUsecase {
       yDataSets.add(lowerBaseline.dy);
     }
 
-    final xMin = offsets.map((e) => e.dx).toList().min();
     final xRange = dataSet.xAxisEndPoint - dataSet.xAxisStartPoint;
     final yMax = yDataSets.max();
     final yMin = yDataSets.min();

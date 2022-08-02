@@ -1,14 +1,14 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, file_names
 
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
+import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisDataSet.dart';
 import 'package:goodlinker_chart/src/TimestampXAxisChartBase.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
 import 'package:goodlinker_chart/src/usecases/ApplyPaddingUsecase.dart';
 import 'package:goodlinker_chart/src/usecases/CalculateOffsets.dart';
-import 'package:goodlinker_chart/style/LineChartStyle.dart';
+import 'package:goodlinker_chart/src/style/LineChartStyle.dart';
 
 class TimestampXAxisLineChart extends StatefulWidget {
   final LineChartStyle style;

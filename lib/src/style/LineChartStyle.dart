@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/style/AxisStyle.dart';
-import 'package:goodlinker_chart/style/BaseLineStyle.dart';
+import 'package:goodlinker_chart/src/style/ChartStyle.dart';
+
+import 'package:goodlinker_chart/src/style/BaseLineStyle.dart';
 
 class LineChartStyle {
   final LineStyle lineStyle;
@@ -24,12 +25,21 @@ class LineChartStyle {
 class LineStyle {
   final Color normalColor;
   final Color underMaskColor;
+  final Color maxValueColor;
+  final Color minValueColor;
   final double width;
 
-  LineStyle({Color? normalColor, Color? underMaskColor, double? width})
+  LineStyle(
+      {Color? normalColor,
+      Color? underMaskColor,
+      Color? maxValueColor,
+      Color? minValueColor,
+      double? width})
       : normalColor = normalColor ?? Colors.green,
-        underMaskColor = underMaskColor ?? Colors.red,
-        width = width ?? 2;
+        underMaskColor = underMaskColor ?? Color.fromARGB(255, 239, 87, 38),
+        maxValueColor = maxValueColor ?? Color.fromARGB(255, 92, 176, 223),
+        minValueColor = minValueColor ?? Color.fromARGB(255, 244, 220, 0),
+        width = width ?? 1;
 }
 
 class CircleStyle {

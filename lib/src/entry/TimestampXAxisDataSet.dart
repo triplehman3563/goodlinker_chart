@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:equatable/equatable.dart';
-import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisData.dart';
 
 class TimestampXAxisDataSet extends Equatable {
   final List<TimestampXAxisData> data;

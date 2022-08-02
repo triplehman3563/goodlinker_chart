@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisData.dart';
-import 'package:goodlinker_chart/entry/TimestampXAxisDataSet.dart';
+import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisData.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisDataSet.dart';
 
 class FakeData {
   static List<List<double>> fakeDataSets = [

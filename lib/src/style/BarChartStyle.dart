@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/style/AxisStyle.dart';
-import 'package:goodlinker_chart/style/BaseLineStyle.dart';
+import 'package:goodlinker_chart/src/style/ChartStyle.dart';
+
+import 'package:goodlinker_chart/src/style/BaseLineStyle.dart';
 
 class BarChartStyle {
   final AxisStyle xAxisStyle;
