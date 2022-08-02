@@ -48,7 +48,6 @@ class BarPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(BarPainter oldDelegate) {
-
     return data.entities.length != oldDelegate.data.entities.length ||
         currentMiddleDisplayIndex != oldDelegate.currentMiddleDisplayIndex ||
         currentDisplayRange != oldDelegate.currentDisplayRange ||

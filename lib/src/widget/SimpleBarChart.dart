@@ -137,7 +137,6 @@ class _SimpleBarChartState extends State<SimpleBarChart>
 
   void _onScaleEnd(ScaleEndDetails details) {
     setState(() {
-
       ctrl.animateWith(FrictionSimulation(
           0.001, // <- the bigger this value, the less friction is applied
           ctrl.value,

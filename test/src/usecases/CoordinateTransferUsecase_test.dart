@@ -3,7 +3,5 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('CoordinateTransfer ...', (tester) async {
-  
-  });
+  testWidgets('CoordinateTransfer ...', (tester) async {});
 }

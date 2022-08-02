@@ -17,4 +17,3 @@ export 'src/style/BaseLineStyle.dart';
 export 'src/style/BarChartStyle.dart';
 export 'src/style/LineChartStyle.dart';
 export 'src/entry/LineChartEntry.dart';
-
