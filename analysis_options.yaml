@@ -7,5 +7,6 @@ linter:
     await_only_futures: true
     lowercase_with_underscores: false
     avoid_print: true
+    unnecessary_statements: true
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
