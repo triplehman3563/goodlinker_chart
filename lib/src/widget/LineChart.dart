@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:goodlinker_chart/src/entry/CartesianDataSet.dart';
@@ -160,7 +158,6 @@ class _LineChartState extends State<LineChart>
   }
 
   void _onTapDown(TapDownDetails details) {
-    log('tap down localPosition: ${details.localPosition}');
     ctrl.stop();
     setState(() {
       if (!_determineDataFeedbackMode()) {

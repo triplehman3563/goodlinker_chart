@@ -38,7 +38,6 @@ class LinePainter extends CustomPainter {
     Offset? lastTapLocation,
   }) : lastTapLocation = lastTapLocation ?? Offset(0, 0);
   late List<LineChartEntry> displayingEntities;
-
   late double maxYLabelWidth;
   late Offset dataDrawingAreaTopLeft;
   late Offset dataDrawingBottomRight;
@@ -55,8 +54,6 @@ class LinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(LinePainter oldDelegate) {
-    print('line repaint');
-
     return data.entities.length != oldDelegate.data.entities.length ||
         currentMiddleDisplayIndex != oldDelegate.currentMiddleDisplayIndex ||
         currentDisplayRange != oldDelegate.currentDisplayRange ||

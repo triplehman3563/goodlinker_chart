@@ -16,7 +16,6 @@ class BarPainter extends CustomPainter {
   final int currentDisplayRange;
   final bool dataFeedbackMode;
   final Offset lastTapLocation;
-  late final List<LineChartEntry> displayingEntities;
   final String Function(double value)? xAxisFormatter;
   final String Function(double value)? yAxisFormatter;
   void Function(LineChartEntry entry, int selectIndex) dataSelectionCallback;
@@ -34,7 +33,7 @@ class BarPainter extends CustomPainter {
     this.maxLine,
     Offset? lastTapLocation,
   }) : lastTapLocation = lastTapLocation ?? Offset(0, 0);
-
+  late List<LineChartEntry> displayingEntities;
   late double maxYLabelWidth;
   late Offset dataDrawingAreaTopLeft;
   late Offset dataDrawingBottomRight;
@@ -49,7 +48,7 @@ class BarPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(BarPainter oldDelegate) {
-    print('bar repaint ');
+
     return data.entities.length != oldDelegate.data.entities.length ||
         currentMiddleDisplayIndex != oldDelegate.currentMiddleDisplayIndex ||
         currentDisplayRange != oldDelegate.currentDisplayRange ||

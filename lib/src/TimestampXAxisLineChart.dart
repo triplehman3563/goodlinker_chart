@@ -211,9 +211,7 @@ class _TimestampXAxisLineChartPainter extends CustomPainter {
         }
         try {
           canvas.drawLine(srcOffset, tarOffset, safeAreaLinePaint);
-        } catch (err, s) {
-          print(err);
-          print(s);
+        } catch (err) {
           continue;
         }
         // *********
@@ -403,8 +401,10 @@ class _TimestampXAxisLineChartPainter extends CustomPainter {
       ..strokeWidth = 1;
     final canvasSize = ApplyPaddingUsecase().applyPadding(
         canvasSize: size, padding: padding, xAxisHeight: xAxisHeight);
-    canvas.drawLine(Offset(padding.left+ canvasSize.width / 2, size.height - xAxisHeight),
-        Offset(size.width / 2, 0), aimLinePaint);
+    canvas.drawLine(
+        Offset(padding.left + canvasSize.width / 2, size.height - xAxisHeight),
+        Offset(size.width / 2, 0),
+        aimLinePaint);
   }
 
   @override

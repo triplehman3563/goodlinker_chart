@@ -1,13 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
-import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
-import 'package:goodlinker_chart/src/entry/TimestampXAxisDataSet.dart';
 import 'package:goodlinker_chart/src/TimestampXAxisChartBase.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
-import 'package:goodlinker_chart/src/usecases/ApplyPaddingUsecase.dart';
+import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
+import 'package:goodlinker_chart/src/entry/TimestampXAxisDataSet.dart';
 import 'package:goodlinker_chart/src/style/LineChartStyle.dart';
+import 'package:goodlinker_chart/src/usecases/ApplyPaddingUsecase.dart';
+
 /// A simple line-chart which is not scrollable or scalible.
 class SimpleLineChart extends StatefulWidget {
   SimpleLineChart({
@@ -125,7 +124,6 @@ class _SimpleLineChartState extends State<SimpleLineChart>
       previousOffset = _diagramOffset;
       prevScale = scale;
       ctrl.stop();
-      log('_startingFocalPoint: $startingFocalPoint');
     });
   }
 
@@ -133,7 +131,6 @@ class _SimpleLineChartState extends State<SimpleLineChart>
     setState(() {
       scale = (prevScale * details.horizontalScale).clamp(1, 10);
       ctrl.value = details.focalPointDelta.dx;
-      log('(details.focalPoint - _startingFocalPoint): ${(details.focalPoint - startingFocalPoint)}');
     });
   }
 
@@ -212,9 +209,8 @@ class LineChartPainter extends CustomPainter {
 
           try {
             canvas.drawLine(srcOffset, tarOffset, safeAreaLinePaint);
-          } catch (err, s) {
-            print(err);
-            print(s);
+          } catch (err) {
+            rethrow;
           }
           ChartBaseline? thisUpperBaseline = _calUpperBaseline(size: size);
           if (thisUpperBaseline != null) {
