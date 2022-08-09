@@ -435,7 +435,7 @@ class _MainState extends Equatable {
 abstract class _MainEvent {}
 
 class _MainEventUpdateDisplayEntry extends _MainEvent {
-  final LineChartEntry displayingEntry;
+  final LineChartEntry? displayingEntry;
 
   _MainEventUpdateDisplayEntry(this.displayingEntry);
 }

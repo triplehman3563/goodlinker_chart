@@ -32,7 +32,7 @@ class LineChart extends StatefulWidget {
   final EdgeInsets padding;
 
   /// Callback with the selected data info.
-  final void Function(LineChartEntry entry, int selectIndex)
+  final void Function(LineChartEntry? entry, int selectIndex)
       dataSelectionCallback;
   LineChart({
     Key? key,

@@ -18,7 +18,7 @@ class BarPainter extends CustomPainter {
   final Offset lastTapLocation;
   final String Function(double value)? xAxisFormatter;
   final String Function(double value)? yAxisFormatter;
-  void Function(LineChartEntry entry, int selectIndex) dataSelectionCallback;
+  void Function(LineChartEntry? entry, int selectIndex) dataSelectionCallback;
   BarPainter({
     required this.style,
     required this.data,
@@ -456,6 +456,8 @@ class BarPainter extends CustomPainter {
               .round()
               .clamp(0, displayingEntities.length - 1);
       dataSelectionCallback(displayingEntities[selectIndex], selectIndex);
+    } else {
+      dataSelectionCallback(null, 0);
     }
   }
 

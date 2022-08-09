@@ -20,7 +20,7 @@ class LinePainter extends CustomPainter {
   final Offset lastTapLocation;
   final String Function(double value)? xAxisFormatter;
   final String Function(double value)? yAxisFormatter;
-  void Function(LineChartEntry entry, int selectIndex) dataSelectionCallback;
+  void Function(LineChartEntry? entry, int selectIndex) dataSelectionCallback;
   LinePainter({
     required this.style,
     required this.data,
@@ -658,6 +658,9 @@ class LinePainter extends CustomPainter {
               .round()
               .clamp(0, displayingEntities.length - 1);
       dataSelectionCallback(displayingEntities[selectIndex], selectIndex);
+    } else {
+      dataSelectionCallback(null, 0);
+
     }
   }
 
