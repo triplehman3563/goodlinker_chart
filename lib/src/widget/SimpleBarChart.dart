@@ -63,57 +63,42 @@ class _SimpleBarChartState extends State<SimpleBarChart>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return GestureDetector(
-          onDoubleTap: () {
-            setState(() {
-              _diagramOffset = Offset.zero;
-              scale = 1;
-            });
-          },
-          onTapDown: (TapDownDetails details) {
-            ctrl.stop();
-            ctrl.value = 0;
-          },
-          onScaleStart: widget.enableXZoom ? _onScaleStart : null,
-          onScaleUpdate: widget.enableXZoom ? _onScaleUpdate : null,
-          onScaleEnd: widget.enableXZoom ? _onScaleEnd : null,
-          child: AnimatedBuilder(
-            animation: ctrl,
-            builder: (context, w) {
-              final double rightDragDis = 100;
-              final double leftDragDis =
-                  100 + (scale - 1) * constraints.maxWidth;
-              if (_diagramOffset.translate(ctrl.value, 0).dx < -leftDragDis) {
-                _diagramOffset = Offset(-leftDragDis, _diagramOffset.dy);
-                ctrl.stop();
-                ctrl.value = 0;
-              }
-              if (_diagramOffset.translate(ctrl.value, 0).dx > rightDragDis) {
-                _diagramOffset = Offset(rightDragDis, _diagramOffset.dy);
-                ctrl.stop();
-                ctrl.value = 0;
-              }
+        return AnimatedBuilder(
+          animation: ctrl,
+          builder: (context, w) {
+            final double rightDragDis = 100;
+            final double leftDragDis =
+                100 + (scale - 1) * constraints.maxWidth;
+            if (_diagramOffset.translate(ctrl.value, 0).dx < -leftDragDis) {
+              _diagramOffset = Offset(-leftDragDis, _diagramOffset.dy);
+              ctrl.stop();
+              ctrl.value = 0;
+            }
+            if (_diagramOffset.translate(ctrl.value, 0).dx > rightDragDis) {
+              _diagramOffset = Offset(rightDragDis, _diagramOffset.dy);
+              ctrl.stop();
+              ctrl.value = 0;
+            }
 
-              if (_diagramOffset.translate(ctrl.value, 0).dx > -leftDragDis &&
-                  _diagramOffset.translate(ctrl.value, 0).dx < rightDragDis) {
-                _diagramOffset = _diagramOffset.translate(ctrl.value, 0);
-              }
+            if (_diagramOffset.translate(ctrl.value, 0).dx > -leftDragDis &&
+                _diagramOffset.translate(ctrl.value, 0).dx < rightDragDis) {
+              _diagramOffset = _diagramOffset.translate(ctrl.value, 0);
+            }
 
-              return TimestampXAxisChartBase(
-                child: CustomPaint(
-                  painter: BarChartPainter(
-                    dataSet: widget.dataSet,
-                    xAxisFormatter: widget.xAxisFormatter,
-                    style: widget.style,
-                    padding: widget.padding,
-                    scale: scale,
-                    diagramOffset: _diagramOffset,
-                    debug: widget.debug,
-                  ),
+            return TimestampXAxisChartBase(
+              child: CustomPaint(
+                painter: BarChartPainter(
+                  dataSet: widget.dataSet,
+                  xAxisFormatter: widget.xAxisFormatter,
+                  style: widget.style,
+                  padding: widget.padding,
+                  scale: scale,
+                  diagramOffset: _diagramOffset,
+                  debug: widget.debug,
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         );
       },
     );

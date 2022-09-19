@@ -1,3 +1,6 @@
+## 0.0.11
+    Remove usage of GestureDetector in SimpleBarChart and SimpleLineChart. They are now not interactive with, the enableXScale and the enableXScroll property will be removed in future.
+
 ## 0.0.10
     adjust data feedback to nullable
 ## 0.0.9 
