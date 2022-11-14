@@ -1,3 +1,6 @@
+## 0.0.12
+    add parameter to controll wether or not to draw circle on last data in SimpleLineChart and LineChart (which has no effect due to they don't draw it in the first place.).
+
 ## 0.0.11
     Remove usage of GestureDetector in SimpleBarChart and SimpleLineChart. They are now not interactive with, the enableXScale and the enableXScroll property will be removed in future.
 
