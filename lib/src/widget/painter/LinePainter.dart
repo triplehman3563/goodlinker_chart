@@ -17,6 +17,7 @@ class LinePainter extends CustomPainter {
   final int currentMiddleDisplayIndex;
   final int currentDisplayRange;
   final bool dataFeedbackMode;
+  final bool enableDrawLastDataCircle;
   final Offset lastTapLocation;
   final String Function(double value)? xAxisFormatter;
   final String Function(double value)? yAxisFormatter;
@@ -28,6 +29,7 @@ class LinePainter extends CustomPainter {
     required this.currentMiddleDisplayIndex,
     required this.currentDisplayRange,
     required this.dataFeedbackMode,
+    required this.enableDrawLastDataCircle,
     required this.dataSelectionCallback,
     this.xAxisFormatter,
     this.yAxisFormatter,
@@ -66,7 +68,6 @@ class LinePainter extends CustomPainter {
     // _drawDebugInfo(canvas: canvas, size: size);
     displayingEntities = _calDisplayingEntities(size);
     _handleTap(canvas: canvas, size: size);
-
     _drawXAxis(canvas: canvas, size: size);
     _drawYAxis(canvas: canvas, size: size);
     _drawArea(canvas: canvas, size: size);
@@ -660,7 +661,6 @@ class LinePainter extends CustomPainter {
       dataSelectionCallback(displayingEntities[selectIndex], selectIndex);
     } else {
       dataSelectionCallback(null, 0);
-
     }
   }
 
