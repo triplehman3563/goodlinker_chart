@@ -45,6 +45,7 @@ class BarPainter extends CustomPainter {
   late double yMin;
   late ChartBaseline? upperBaseline;
   late ChartBaseline? maxBaseLine;
+  late double minimalBarHeight;
 
   @override
   bool shouldRepaint(BarPainter oldDelegate) {
@@ -346,10 +347,14 @@ class BarPainter extends CustomPainter {
         maxWidth: maxYLabelWidth,
       );
       canvas.drawLine(
-        Offset(areaDrawingBottomRight.dx,
-            dataDrawingBottomRight.dy - i * stepHeight),
-        Offset(areaDrawingBottomRight.dx + 5,
-            dataDrawingBottomRight.dy - i * stepHeight),
+        Offset(
+          areaDrawingBottomRight.dx,
+          dataDrawingBottomRight.dy - i * stepHeight-minimalBarHeight,
+        ),
+        Offset(
+          areaDrawingBottomRight.dx + 5,
+          dataDrawingBottomRight.dy - i * stepHeight-minimalBarHeight,
+        ),
         Paint(),
       );
       axisTextPainter.paint(
@@ -358,7 +363,7 @@ class BarPainter extends CustomPainter {
             areaDrawingBottomRight.dx + 8,
             dataDrawingBottomRight.dy -
                 i * stepHeight -
-                axisTextPainter.height / 2),
+                axisTextPainter.height / 2-minimalBarHeight),
       );
     }
   }
@@ -494,19 +499,19 @@ class BarPainter extends CustomPainter {
     yDatas.addAll([upperLine]);
     maxYLabelWidth = _calMaxYAxisLabelWidth(size: size, yDatas: yDatas);
     _calDrawingArea(size: size);
-
+    minimalBarHeight = size.height / 10;
     drawingAreaSize = Size(
       dataDrawingBottomRight.dx - dataDrawingAreaTopLeft.dx,
-      dataDrawingBottomRight.dy - dataDrawingAreaTopLeft.dy,
+      dataDrawingBottomRight.dy - dataDrawingAreaTopLeft.dy - minimalBarHeight,
     );
 
     final finalYDatas = yDatas.whereType<double>().toList();
     yMax = finalYDatas.max();
     yMin = finalYDatas.min();
-    final yRange = yMax - yMin;
+    double yRange = yMax - yMin;
     final middleXPos = drawingAreaSize.width / 2;
     final xUnit = drawingAreaSize.width / displayingEntities.length;
-    final yUnit = drawingAreaSize.height / yRange;
+    final yUnit = (drawingAreaSize.height) / yRange;
 
     upperBaseline = upperLine != null
         ? ChartBaseline(

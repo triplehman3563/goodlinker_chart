@@ -1,3 +1,6 @@
+## 0.0.13
+    add minimal height for BarChart.
+
 ## 0.0.12
     add parameter to controll wether or not to draw circle on last data in SimpleLineChart and LineChart (which has no effect due to they don't draw it in the first place.).
 

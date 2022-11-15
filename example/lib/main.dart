@@ -373,8 +373,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           x: (1655071200 +
                                                   index * simulatedDataInterval)
                                               .toDouble(),
-                                          y: thisFakeData[
-                                              index % thisFakeData.length],
+                                          y: 500,
                                           data: '',
                                         );
                                       }).toList(),
