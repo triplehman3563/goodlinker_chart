@@ -13,6 +13,10 @@ class CartesianEntry {
     this.y,
     this.data,
   });
+  @override
+  String toString() {
+    return 'x: $x, y: $y';
+  }
 
   CartesianEntry copyWith({
     double? x,

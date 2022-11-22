@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
 import 'package:goodlinker_chart/src/entry/CartesianData.dart';
@@ -65,15 +67,20 @@ class LinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // _drawDebugInfo(canvas: canvas, size: size);
-    displayingEntities = _calDisplayingEntities(size);
-    _handleTap(canvas: canvas, size: size);
-    _drawXAxis(canvas: canvas, size: size);
-    _drawYAxis(canvas: canvas, size: size);
-    _drawArea(canvas: canvas, size: size);
-    _drawExtremeValue(canvas: canvas, size: size);
-    _drawData(canvas: canvas, size: size);
-    _drawDisplayingDataLine(canvas: canvas, size: size);
+    try {
+      // _drawDebugInfo(canvas: canvas, size: size);
+      displayingEntities = _calDisplayingEntities(size);
+      _handleTap(canvas: canvas, size: size);
+      _drawXAxis(canvas: canvas, size: size);
+      _drawYAxis(canvas: canvas, size: size);
+      _drawArea(canvas: canvas, size: size);
+      _drawExtremeValue(canvas: canvas, size: size);
+      _drawData(canvas: canvas, size: size);
+      _drawDisplayingDataLine(canvas: canvas, size: size);
+    } catch (err, s) {
+      log(s.toString());
+      rethrow;
+    }
   }
 
   void _drawData({
@@ -93,7 +100,7 @@ class LinePainter extends CustomPainter {
         final lastData = displayingEntities[index - 1];
         final pointWidth = entry.x - lastData.x;
 
-        if (lastData.y == null) {
+        if (lastData.y == null || lastData.y == double.nan) {
         } else {
           final srcOffset = Offset(lastData.x, lastData.y ?? 0);
           final tarOffset = Offset(entry.x, entry.y ?? 0);
@@ -257,7 +264,7 @@ class LinePainter extends CustomPainter {
     );
 
     ChartBaseline? thisMaxLine = maxBaseLine;
-    if (thisMaxLine != null) {
+    if (thisMaxLine != null && !thisMaxLine!.dy.isNaN) {
       if (thisMaxLine.dy <= size.height && thisMaxLine.dy >= 0) {
         final TextSpan axisTextSpan = TextSpan(
           text: maxLine?.toStringAsFixed(1),
@@ -305,7 +312,7 @@ class LinePainter extends CustomPainter {
       }
     }
     ChartBaseline? thisMinLine = minBaseLine;
-    if (thisMinLine != null) {
+    if (thisMinLine != null && !thisMinLine!.dy.isNaN) {
       if (thisMinLine.dy <= size.height && thisMinLine.dy >= 0) {
         final TextSpan axisTextSpan = TextSpan(
           text: minLine?.toStringAsFixed(1),
@@ -370,18 +377,36 @@ class LinePainter extends CustomPainter {
       fontSize: style.xAxisStyle.axisLabelFontSize,
       // fontSize: 14,
     );
-    canvas.drawRect(
-      Rect.fromPoints(
-        Offset(areaDrawingAreaTopLeft.dx,
-            upperBaseline != null ? upperBaseline!.dy : 0),
-        Offset(areaDrawingBottomRight.dx,
-            lowerBaseline != null ? lowerBaseline!.dy : 0),
-      ),
-      normalAreaPaint,
-    );
+
+    try {
+      canvas.drawRect(
+        Rect.fromPoints(
+          Offset(
+            areaDrawingAreaTopLeft.dx,
+            upperBaseline != null && !upperBaseline!.dy.isNaN
+                ? upperBaseline!.dy
+                : 0,
+          ),
+          Offset(
+            areaDrawingBottomRight.dx,
+            lowerBaseline != null && !upperBaseline!.dy.isNaN
+                ? lowerBaseline!.dy
+                : areaDrawingBottomRight.dy,
+          ),
+        ),
+        normalAreaPaint,
+      );
+    } catch (err, s) {
+      log('x1: ${areaDrawingAreaTopLeft.dx}');
+      log('y1: ${upperBaseline != null && upperBaseline!.dy != double.nan ? upperBaseline!.dy : 0}');
+      log('y1: ${upperBaseline!.dy} == ${double.nan}? ${upperBaseline!.dy.isNaN}');
+      log('x2: ${areaDrawingBottomRight.dx}');
+      log('y2: ${lowerBaseline != null && upperBaseline!.dy != double.nan ? lowerBaseline!.dy : 0}');
+      rethrow;
+    }
 
     ChartBaseline? thisUpperBaseline = upperBaseline;
-    if (thisUpperBaseline != null) {
+    if (thisUpperBaseline != null && !thisUpperBaseline!.dy.isNaN) {
       final TextSpan axisTextSpan = TextSpan(
         text: upperLine?.toStringAsFixed(1),
         style: textStyle,
@@ -439,7 +464,7 @@ class LinePainter extends CustomPainter {
       );
     }
     ChartBaseline? thisLowerBaseline = lowerBaseline;
-    if (thisLowerBaseline != null) {
+    if (thisLowerBaseline != null && !thisLowerBaseline!.dy.isNaN) {
       final TextSpan axisTextSpan = TextSpan(
         text: lowerline?.toStringAsFixed(1),
         style: textStyle,

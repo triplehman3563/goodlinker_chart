@@ -39,7 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
   late _MainBloc bloc;
   @override
   void initState() {
-    bloc = _MainBloc(const _MainState(null));
+    bloc = _MainBloc(const _MainState(
+        panel1DisplayingEntry: null, panel2DisplayingEntry: null));
     super.initState();
   }
 
@@ -58,151 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 return Column(
                   children: [
                     const Text('test'),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          height: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SimpleBarChart(
-                              xAxisFormatter: (value) {
-                                DateTime dateTime =
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        (value * 1000).toInt());
-                                String text = dateTime.minute == 0
-                                    ? '${dateTime.hour}時'
-                                    : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                return dateTime.minute == 0 ? text : '';
-                                // return text;
-                              },
-                              // padding: EdgeInsets.all(50),
-                              style: BarChartStyle(
-                                  style: BarStyle(
-                                normalColor: Colors.green.withAlpha(75),
-                                underMaskColor: Colors.red.withAlpha(75),
-                              )),
-                              dataSet: TimestampXAxisDataSet(
-                                data: Iterable.generate(simulatedItemNumber,
-                                    (index) {
-                                  final List<double> thisFakeData =
-                                      FakeData.bigFakeData;
-                                  return TimestampXAxisData(
-                                      x: 1655071200 +
-                                          index * simulatedDataInterval,
-                                      y: thisFakeData[
-                                          index % thisFakeData.length]);
-                                }).toList(),
-                                xAxisStartPoint: 1655071200,
-                                xAxisEndPoint: 1655071200 +
-                                    simulatedItemNumber * simulatedDataInterval,
-                                // baseline: [350, 400],
-                                upperBaseline: const ChartBaseline(dy: 400),
-                                lowerBaseline: const ChartBaseline(dy: 350),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 200,
-                          height: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SimpleLineChart(
-                              // padding: EdgeInsets.all(50),
-                              style: LineChartStyle(lineStyle: LineStyle()),
-                              xAxisFormatter: (value) {
-                                DateTime dateTime =
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        (value * 1000).toInt());
-                                String text = dateTime.minute == 0
-                                    ? '${dateTime.hour}時'
-                                    : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                return dateTime.minute == 0 ? text : '';
-                                // return text;
-                              },
-                              dataSet: TimestampXAxisDataSet(
-                                data: Iterable.generate(simulatedItemNumber,
-                                    (index) {
-                                  final List<double> thisFakeData =
-                                      FakeData.bigFakeData;
-                                  return TimestampXAxisData(
-                                      x: 1655071200 +
-                                          index * simulatedDataInterval,
-                                      y: thisFakeData[
-                                          index % thisFakeData.length]);
-                                }).toList(),
-                                xAxisStartPoint: 1655071200,
-                                xAxisEndPoint: 1655071200 +
-                                    simulatedItemNumber * simulatedDataInterval,
-                                // baseline: [350, 400],
-                                upperBaseline: const ChartBaseline(dy: 400),
-                                lowerBaseline: const ChartBaseline(dy: 350),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 300,
-                              height: 200,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: LineChart(
-                                  dataSelectionCallback:
-                                      (entry, selectIndex) {},
-                                  xAxisFormatter: (value) {
-                                    DateTime dateTime =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            (value * 1000).toInt());
-                                    String text = dateTime.minute == 0
-                                        ? '${dateTime.hour}時'
-                                        : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return dateTime.minute == 0 ? text : '';
-                                    // return text;
-                                  },
-                                  yAxisFormatter: (value) {
-                                    return value.toStringAsFixed(1);
-                                    // return text;
-                                  },
-                                  cartesianDataSet: CartesianDataSet(
-                                    upperMaskLine: 600,
-                                    lowerMaskLine: 280,
-                                    maxValue: 630,
-                                    minValue: 253,
-                                    data: CartesianData(
-                                      entities: Iterable.generate(
-                                          simulatedItemNumber, (index) {
-                                        final List<double> thisFakeData =
-                                            FakeData.bigFakeData;
-                                        return CartesianEntry(
-                                          x: (1655071200 +
-                                                  index * simulatedDataInterval)
-                                              .toDouble(),
-                                          y: thisFakeData[
-                                              index % thisFakeData.length],
-                                          data: '',
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  // padding: EdgeInsets.all(50),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
                     Column(
                       children: [
                         Row(
@@ -216,64 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   defalutDisplayRange: 100,
                                   defaultMiddleDisplayIndex:
                                       simulatedItemNumber - 1,
-                                  dataSelectionCallback:
-                                      (entry, selectIndex) {},
-                                  xAxisFormatter: (value) {
-                                    DateTime dateTime =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            (value * 1000).toInt());
-                                    String text = dateTime.minute == 0
-                                        ? '${dateTime.hour}時'
-                                        : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return dateTime.minute == 0 ? text : '';
-                                    // return text;
-                                  },
-                                  yAxisFormatter: (value) {
-                                    return value.toStringAsFixed(1);
-                                    // return text;
-                                  },
-                                  cartesianDataSet: CartesianDataSet(
-                                    upperMaskLine: 600,
-                                    lowerMaskLine: 280,
-                                    maxValue: 630,
-                                    minValue: 253,
-                                    data: CartesianData(
-                                      entities: Iterable.generate(
-                                          simulatedItemNumber, (index) {
-                                        final List<double> thisFakeData =
-                                            FakeData.bigFakeData;
-                                        return CartesianEntry(
-                                          x: (1655071200 +
-                                                  index * simulatedDataInterval)
-                                              .toDouble(),
-                                          y: thisFakeData[
-                                              index % thisFakeData.length],
-                                          data: '',
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  // padding: EdgeInsets.all(50),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 200,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: BarChart(
                                   dataSelectionCallback: (entry, selectIndex) {
-                                    bloc.add(
-                                        _MainEventUpdateDisplayEntry(entry));
+                                    bloc.add(eventUpdatePanel1Entry(entry));
                                   },
                                   xAxisFormatter: (value) {
                                     DateTime dateTime =
@@ -307,7 +107,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                               index % thisFakeData.length],
                                           data: '',
                                         );
-                                      }).toList(),
+                                      }).toList()
+                                        ..addAll(
+                                          [
+                                            CartesianEntry(
+                                              x: (1655071200 +
+                                                      240 *
+                                                          simulatedDataInterval)
+                                                  .toDouble(),
+                                              y: double.nan,
+                                              data: '',
+                                            ),
+                                            CartesianEntry(
+                                              x: (1655071200 +
+                                                      241 *
+                                                          simulatedDataInterval)
+                                                  .toDouble(),
+                                              y: double.nan,
+                                              data: '',
+                                            ),
+                                          ],
+                                        ),
                                     ),
                                   ),
                                   // padding: EdgeInsets.all(50),
@@ -316,17 +136,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ],
                         ),
-                        if (state.displayingEntry != null)
-                          Column(
-                            children: [
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.x}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.y}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.data}'),
-                            ],
-                          )
+                        Text(
+                            '${state.panel1DisplayingEntry?.x}/${state.panel1DisplayingEntry?.y}'),
                       ],
                     ),
                     Column(
@@ -342,8 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   defalutDisplayRange: 100,
                                   defaultMiddleDisplayIndex: 0,
                                   dataSelectionCallback: (entry, selectIndex) {
-                                    bloc.add(
-                                        _MainEventUpdateDisplayEntry(entry));
+                                    bloc.add(eventUpdatePanel2Entry(entry));
                                   },
                                   xAxisFormatter: (value) {
                                     DateTime dateTime =
@@ -352,8 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     String text = dateTime.minute == 0
                                         ? '${dateTime.hour}時'
                                         : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return dateTime.minute == 0 ? text : '';
-                                    // return text;
+                                    return value==0?'': dateTime.minute == 0 ? text : '';
                                   },
                                   yAxisFormatter: (value) {
                                     return value.toStringAsFixed(1);
@@ -373,10 +182,31 @@ class _MyHomePageState extends State<MyHomePage> {
                                           x: (1655071200 +
                                                   index * simulatedDataInterval)
                                               .toDouble(),
-                                          y: 500,
+                                          y: thisFakeData[
+                                              index % thisFakeData.length],
                                           data: '',
                                         );
-                                      }).toList(),
+                                      }).toList()
+                                        ..addAll(
+                                          [
+                                            CartesianEntry(
+                                              x: (1655071200 +
+                                                      240 *
+                                                          simulatedDataInterval)
+                                                  .toDouble(),
+                                              y: double.nan,
+                                              data: '',
+                                            ),
+                                            CartesianEntry(
+                                              x: (1655071200 +
+                                                      241 *
+                                                          simulatedDataInterval)
+                                                  .toDouble(),
+                                              y: double.nan,
+                                              data: '',
+                                            ),
+                                          ],
+                                        ),
                                     ),
                                   ),
                                   // padding: EdgeInsets.all(50),
@@ -385,17 +215,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ],
                         ),
-                        if (state.displayingEntry != null)
-                          Column(
-                            children: [
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.x}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.y}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.data}'),
-                            ],
-                          )
+                        Text(
+                            '${state.panel2DisplayingEntry?.x}/${state.panel2DisplayingEntry?.y}'),
                       ],
                     ),
                   ],
@@ -411,30 +232,62 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class _MainBloc extends Bloc<_MainEvent, _MainState> {
   _MainBloc(_MainState initialState) : super(initialState) {
-    on<_MainEventUpdateDisplayEntry>(_updateDisplayEntry);
+    on<eventUpdatePanel1Entry>(_updatePanel1DisplayEntry);
+    on<eventUpdatePanel2Entry>(_updatePanel2DisplayEntry);
   }
 
-  void _updateDisplayEntry(
-    _MainEventUpdateDisplayEntry event,
+  void _updatePanel1DisplayEntry(
+    eventUpdatePanel1Entry event,
     Emitter<_MainState> emitter,
   ) {
-    emitter.call(_MainState(event.displayingEntry));
+    emitter.call(state.copyWith(
+      panel1DisplayingEntry: event.displayingEntry,
+    ));
+  }
+
+  void _updatePanel2DisplayEntry(
+    eventUpdatePanel2Entry event,
+    Emitter<_MainState> emitter,
+  ) {
+    emitter.call(state.copyWith(
+      panel2DisplayingEntry: event.displayingEntry,
+    ));
   }
 }
 
 class _MainState extends Equatable {
-  const _MainState(this.displayingEntry);
+  const _MainState({
+    this.panel1DisplayingEntry,
+    this.panel2DisplayingEntry,
+  });
+  _MainState copyWith({
+    LineChartEntry? panel1DisplayingEntry,
+    LineChartEntry? panel2DisplayingEntry,
+  }) =>
+      _MainState(
+        panel1DisplayingEntry:
+            panel1DisplayingEntry ?? this.panel1DisplayingEntry,
+        panel2DisplayingEntry:
+            panel2DisplayingEntry ?? this.panel2DisplayingEntry,
+      );
 
   @override
-  List<Object?> get props => [displayingEntry];
+  List<Object?> get props => [panel1DisplayingEntry, panel2DisplayingEntry];
 
-  final LineChartEntry? displayingEntry;
+  final LineChartEntry? panel1DisplayingEntry;
+  final LineChartEntry? panel2DisplayingEntry;
 }
 
 abstract class _MainEvent {}
 
-class _MainEventUpdateDisplayEntry extends _MainEvent {
+class eventUpdatePanel1Entry extends _MainEvent {
   final LineChartEntry? displayingEntry;
 
-  _MainEventUpdateDisplayEntry(this.displayingEntry);
+  eventUpdatePanel1Entry(this.displayingEntry);
+}
+
+class eventUpdatePanel2Entry extends _MainEvent {
+  final LineChartEntry? displayingEntry;
+
+  eventUpdatePanel2Entry(this.displayingEntry);
 }

@@ -6,8 +6,16 @@ extension FindIntListMax on List<int> {
 }
 
 extension FindDoubleListMax on List<double> {
-  double max() => reduce((value, element) => value > element ? value : element);
-  double min() => reduce((value, element) => value < element ? value : element);
+  double max() => reduce((value, element) => element.isNaN
+      ? value
+      : value > element
+          ? value
+          : element);
+  double min() => reduce((value, element) => element.isNaN
+      ? value
+      : value < element
+          ? value
+          : element);
 }
 
 extension DateTimeFormatpr on DateTime {
