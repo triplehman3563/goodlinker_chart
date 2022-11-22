@@ -1,3 +1,6 @@
+## 0.0.15
+    remove minimal height for BarChart.
+
 ## 0.0.14
     add data support NaN.
 

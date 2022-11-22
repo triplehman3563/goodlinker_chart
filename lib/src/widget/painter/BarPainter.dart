@@ -514,7 +514,7 @@ class BarPainter extends CustomPainter {
     yDatas.addAll([upperLine]);
     maxYLabelWidth = _calMaxYAxisLabelWidth(size: size, yDatas: yDatas);
     _calDrawingArea(size: size);
-    minimalBarHeight = size.height / 10;
+    minimalBarHeight = 0;
     drawingAreaSize = Size(
       dataDrawingAreaBottomRight.dx - dataDrawingAreaTopLeft.dx,
       dataDrawingAreaBottomRight.dy -
