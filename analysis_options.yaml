@@ -8,5 +8,6 @@ linter:
     lowercase_with_underscores: false
     avoid_print: true
     unnecessary_statements: true
+    unnecessary_this: false
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

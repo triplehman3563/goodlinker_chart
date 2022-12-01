@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:goodlinker_chart/src/style/ChartStyle.dart';
+import 'package:goodlinker_chart/src/style/AxisStyle.dart';
+import 'package:tuple/tuple.dart';
 
-import 'package:goodlinker_chart/src/style/BaseLineStyle.dart';
-
+/// the style applies on [BarChart].
 class BarChartStyle {
+  /// background color of the bottom of all chart, default to be grey.
+  final Color backgroundColor;
+
+  /// background color of the xAxis of chart, default to be blueGrey.
+  final Color xAxisBackgroundColor;
+
+  /// color of the entities, default to be black.
+  final Color entitiesColors;
+
+  /// style for xAxis
   final AxisStyle xAxisStyle;
-  final BaseLineStyle baseLineStyle;
-  final BarStyle barStyle;
-  final Color normalAreaColor;
 
-  BarChartStyle(
-      {AxisStyle? xAxisStyle,
-      BaseLineStyle? baseLineStyle,
-      Color? normalAreaColor,
-      BarStyle? style})
-      : xAxisStyle = xAxisStyle ?? AxisStyle(),
-        baseLineStyle = baseLineStyle ?? BaseLineStyle(),
-        normalAreaColor = normalAreaColor ?? Color.fromARGB(25, 7, 206, 63),
-        barStyle = style ?? BarStyle();
-}
+  /// style for xAxis
+  final AxisStyle yAxisStyle;
 
-class BarStyle {
-  final Color normalColor;
-  final Color underMaskColor;
-  final Color emphasizedNormalColor;
-  final Color emphasizedUnderMaskColor;
-
-  BarStyle({
-    Color? normalColor,
-    Color? underMaskColor,
-    double? width,
-    Color? emphasizedNormalColor,
-    Color? emphasizedUnderMaskColor,
-  })  : normalColor = normalColor ?? Colors.green,
-        underMaskColor = underMaskColor ?? Colors.red,
-        emphasizedNormalColor = emphasizedNormalColor ?? Colors.green,
-        emphasizedUnderMaskColor = emphasizedUnderMaskColor ?? Colors.red;
+  /// padding between bars and border
+  final EdgeInsets innerPadding;
+  BarChartStyle({
+    Color? backgroundColor,
+    Color? xAxisBackgroundColor,
+    Color? entitiesColors,
+    AxisStyle? xAxisStyle,
+    AxisStyle? yAxisStyle,
+    EdgeInsets? innerPadding,
+  })  : backgroundColor = backgroundColor ?? Colors.grey,
+        xAxisBackgroundColor = xAxisBackgroundColor ?? Colors.blueGrey,
+        entitiesColors = entitiesColors ?? Colors.black,
+        xAxisStyle = xAxisStyle ?? AxisStyle(),
+        yAxisStyle = yAxisStyle ?? AxisStyle(),
+        innerPadding = innerPadding ?? EdgeInsets.all(4);
 }

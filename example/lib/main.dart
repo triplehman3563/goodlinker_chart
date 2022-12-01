@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        textTheme: TextTheme(),
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -58,344 +59,65 @@ class _MyHomePageState extends State<MyHomePage> {
                 return Column(
                   children: [
                     const Text('test'),
-                    Row(
+                    Column(
                       children: [
                         SizedBox(
-                          width: 200,
-                          height: 100,
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: SimpleBarChart(
-                              xAxisFormatter: (value) {
-                                DateTime dateTime =
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        (value * 1000).toInt());
-                                String text = dateTime.minute == 0
-                                    ? '${dateTime.hour}時'
-                                    : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                return dateTime.minute == 0 ? text : '';
-                                // return text;
-                              },
-                              // padding: EdgeInsets.all(50),
-                              style: BarChartStyle(
-                                  style: BarStyle(
-                                normalColor: Colors.green.withAlpha(75),
-                                underMaskColor: Colors.red.withAlpha(75),
-                              )),
-                              dataSet: TimestampXAxisDataSet(
-                                data: Iterable.generate(simulatedItemNumber,
-                                    (index) {
-                                  final List<double> thisFakeData =
-                                      FakeData.bigFakeData;
-                                  return TimestampXAxisData(
-                                      x: 1655071200 +
-                                          index * simulatedDataInterval,
-                                      y: thisFakeData[
-                                          index % thisFakeData.length]);
-                                }).toList(),
-                                xAxisStartPoint: 1655071200,
-                                xAxisEndPoint: 1655071200 +
-                                    simulatedItemNumber * simulatedDataInterval,
-                                // baseline: [350, 400],
-                                upperBaseline: const ChartBaseline(dy: 400),
-                                lowerBaseline: const ChartBaseline(dy: 350),
-                              ),
+                            child: BarChart(
+                              dataSet: [
+                                NewData(x: 1655071200, y: 600),
+                                NewData(x: 1655071380, y: double.nan),
+                                NewData(x: 1655071560, y: 660),
+                                NewData(x: 1655071740, y: double.nan),
+                                NewData(x: 1655071920, y: 550),
+                                NewData(x: 1655072100, y: 400),
+                                NewData(x: 1655072280, y: double.nan),
+                                NewData(x: 1655072460, y: 700),
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
                         SizedBox(
-                          width: 200,
-                          height: 100,
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: SimpleLineChart(
-                              // padding: EdgeInsets.all(50),
-                              style: LineChartStyle(lineStyle: LineStyle()),
-                              xAxisFormatter: (value) {
-                                DateTime dateTime =
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        (value * 1000).toInt());
-                                String text = dateTime.minute == 0
-                                    ? '${dateTime.hour}時'
-                                    : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                return dateTime.minute == 0 ? text : '';
-                                // return text;
-                              },
-                              dataSet: TimestampXAxisDataSet(
-                                data: Iterable.generate(simulatedItemNumber,
-                                    (index) {
-                                  final List<double> thisFakeData =
-                                      FakeData.bigFakeData;
-                                  return TimestampXAxisData(
-                                      x: 1655071200 +
-                                          index * simulatedDataInterval,
-                                      y: thisFakeData[
-                                          index % thisFakeData.length]);
-                                }).toList(),
-                                xAxisStartPoint: 1655071200,
-                                xAxisEndPoint: 1655071200 +
-                                    simulatedItemNumber * simulatedDataInterval,
-                                // baseline: [350, 400],
-                                upperBaseline: const ChartBaseline(dy: 400),
-                                lowerBaseline: const ChartBaseline(dy: 350),
-                              ),
+                            child: BarChart(
+                              dataSet: [
+                                NewData(x: 1655071200, y: 600),
+                                NewData(x: 1655071380, y: 600),
+                                NewData(x: 1655071560, y: 600),
+                                NewData(x: 1655071740, y: 600),
+                                NewData(x: 1655071920, y: 600),
+                                NewData(x: 1655072100, y: 600),
+                                NewData(x: 1655072280, y: 600),
+                                NewData(x: 1655072460, y: 600),
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 300,
-                              height: 200,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: LineChart(
-                                  dataSelectionCallback:
-                                      (entry, selectIndex) {},
-                                  xAxisFormatter: (value) {
-                                    DateTime dateTime =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            (value * 1000).toInt());
-                                    String text = dateTime.minute == 0
-                                        ? '${dateTime.hour}時'
-                                        : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return dateTime.minute == 0 ? text : '';
-                                    // return text;
-                                  },
-                                  yAxisFormatter: (value) {
-                                    return value.toStringAsFixed(1);
-                                    // return text;
-                                  },
-                                  cartesianDataSet: CartesianDataSet(
-                                    upperMaskLine: 600,
-                                    lowerMaskLine: 280,
-                                    maxValue: 630,
-                                    minValue: 253,
-                                    data: CartesianData(
-                                      entities: Iterable.generate(
-                                          simulatedItemNumber, (index) {
-                                        final List<double> thisFakeData =
-                                            FakeData.bigFakeData;
-                                        return CartesianEntry(
-                                          x: (1655071200 +
-                                                  index * simulatedDataInterval)
-                                              .toDouble(),
-                                          y: thisFakeData[
-                                              index % thisFakeData.length],
-                                          data: '',
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  // padding: EdgeInsets.all(50),
-                                ),
-                              ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: BarChart(
+                              dataSet: [
+                                NewData(x: 1655071200, y: 0),
+                                NewData(x: 1655071380, y: 0),
+                                NewData(x: 1655071560, y: 0),
+                                NewData(x: 1655071740, y: 0),
+                                NewData(x: 1655071920, y: 0),
+                                NewData(x: 1655072100, y: 0),
+                                NewData(x: 1655072280, y: 0),
+                                NewData(x: 1655072460, y: 0),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 300,
-                              height: 200,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: LineChart(
-                                  defalutDisplayRange: 100,
-                                  defaultMiddleDisplayIndex:
-                                      simulatedItemNumber - 1,
-                                  dataSelectionCallback:
-                                      (entry, selectIndex) {},
-                                  xAxisFormatter: (value) {
-                                    DateTime dateTime =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            (value * 1000).toInt());
-                                    String text = dateTime.minute == 0
-                                        ? '${dateTime.hour}時'
-                                        : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return dateTime.minute == 0 ? text : '';
-                                    // return text;
-                                  },
-                                  yAxisFormatter: (value) {
-                                    return value.toStringAsFixed(1);
-                                    // return text;
-                                  },
-                                  cartesianDataSet: CartesianDataSet(
-                                    upperMaskLine: 600,
-                                    lowerMaskLine: 280,
-                                    maxValue: 630,
-                                    minValue: 253,
-                                    data: CartesianData(
-                                      entities: Iterable.generate(
-                                          simulatedItemNumber, (index) {
-                                        final List<double> thisFakeData =
-                                            FakeData.bigFakeData;
-                                        return CartesianEntry(
-                                          x: (1655071200 +
-                                                  index * simulatedDataInterval)
-                                              .toDouble(),
-                                          y: thisFakeData[
-                                              index % thisFakeData.length],
-                                          data: '',
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  // padding: EdgeInsets.all(50),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              height: 200,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: BarChart(
-                                  dataSelectionCallback: (entry, selectIndex) {
-                                    bloc.add(
-                                        _MainEventUpdateDisplayEntry(entry));
-                                  },
-                                  xAxisFormatter: (value) {
-                                    DateTime dateTime =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            (value * 1000).toInt());
-                                    String text = dateTime.minute == 0
-                                        ? '${dateTime.hour}時'
-                                        : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return dateTime.minute == 0 ? text : '';
-                                    // return text;
-                                  },
-                                  yAxisFormatter: (value) {
-                                    return value.toStringAsFixed(1);
-                                    // return text;
-                                  },
-                                  cartesianDataSet: CartesianDataSet(
-                                    upperMaskLine: 600,
-                                    lowerMaskLine: 280,
-                                    maxValue: 630,
-                                    minValue: 253,
-                                    data: CartesianData(
-                                      entities: Iterable.generate(
-                                          simulatedItemNumber, (index) {
-                                        final List<double> thisFakeData =
-                                            FakeData.bigFakeData;
-                                        return CartesianEntry(
-                                          x: (1655071200 +
-                                                  index * simulatedDataInterval)
-                                              .toDouble(),
-                                          y: thisFakeData[
-                                              index % thisFakeData.length],
-                                          data: '',
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  // padding: EdgeInsets.all(50),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (state.displayingEntry != null)
-                          Column(
-                            children: [
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.x}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.y}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.data}'),
-                            ],
-                          )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 70,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: BarChart(
-                                  defalutDisplayRange: 100,
-                                  defaultMiddleDisplayIndex: 0,
-                                  dataSelectionCallback: (entry, selectIndex) {
-                                    bloc.add(
-                                        _MainEventUpdateDisplayEntry(entry));
-                                  },
-                                  xAxisFormatter: (value) {
-                                    DateTime dateTime =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            (value * 1000).toInt());
-                                    String text = dateTime.minute == 0
-                                        ? '${dateTime.hour}時'
-                                        : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return dateTime.minute == 0 ? text : '';
-                                    // return text;
-                                  },
-                                  yAxisFormatter: (value) {
-                                    return value.toStringAsFixed(1);
-                                    // return text;
-                                  },
-                                  cartesianDataSet: CartesianDataSet(
-                                    upperMaskLine: 600,
-                                    lowerMaskLine: 280,
-                                    maxValue: 630,
-                                    minValue: 253,
-                                    data: CartesianData(
-                                      entities: Iterable.generate(
-                                          simulatedItemNumber, (index) {
-                                        final List<double> thisFakeData =
-                                            FakeData.bigFakeData;
-                                        return CartesianEntry(
-                                          x: (1655071200 +
-                                                  index * simulatedDataInterval)
-                                              .toDouble(),
-                                          y: 500,
-                                          data: '',
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  // padding: EdgeInsets.all(50),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (state.displayingEntry != null)
-                          Column(
-                            children: [
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.x}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.y}'),
-                              Text(
-                                  'data: ${state.displayingEntry?.originEntry.data}'),
-                            ],
-                          )
                       ],
                     ),
                   ],
