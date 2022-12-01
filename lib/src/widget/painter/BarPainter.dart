@@ -7,6 +7,7 @@ import 'package:goodlinker_chart/src/entry/CartesianEntry.dart';
 import 'package:goodlinker_chart/src/entry/LineChartEntry.dart';
 import 'package:goodlinker_chart/src/style/ChartStyle.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
+import 'package:goodlinker_chart/src/usecases/contrast_color_calculate.dart';
 
 class BarPainter extends CustomPainter {
   final ChartStyle style;
@@ -180,7 +181,10 @@ class BarPainter extends CustomPainter {
       if (thisMaxLine.dy <= size.height && thisMaxLine.dy >= 0) {
         final TextSpan axisTextSpan = TextSpan(
           text: maxLine?.toStringAsFixed(1),
-          style: textStyle,
+          style: textStyle.copyWith(
+              color: ContrastColorCalculate()
+                  .determinemonochromeFontColorFromBackground(
+                      backgroundColor: maxValuePaint.color)),
         );
         final axisTextPainter = TextPainter(
           text: axisTextSpan,
@@ -190,6 +194,7 @@ class BarPainter extends CustomPainter {
           minWidth: 0,
           maxWidth: size.width,
         );
+        // drawing top extreme value label on y axis
         canvas.drawLine(
           Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
           Offset(areaDrawingBottomRight.dx + 5, thisMaxLine.dy),
@@ -215,12 +220,22 @@ class BarPainter extends CustomPainter {
           Offset(areaDrawingBottomRight.dx + 8,
               thisMaxLine.dy - axisTextPainter.height / 2),
         );
-
-        canvas.drawLine(
-          Offset(areaDrawingAreaTopLeft.dx, thisMaxLine.dy),
-          Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
-          maxValuePaint,
-        );
+        // drawing top extreme value line
+        double dottedLineWidth = 1, dottedLineSpace = 1;
+        double startX = areaDrawingAreaTopLeft.dx;
+        while (startX < areaDrawingBottomRight.dx) {
+          canvas.drawLine(
+            Offset(startX, thisMaxLine.dy),
+            Offset(startX + dottedLineWidth, thisMaxLine.dy),
+            maxValuePaint,
+          );
+          startX += dottedLineWidth + dottedLineSpace;
+        }
+        // canvas.drawLine(
+        //   Offset(areaDrawingAreaTopLeft.dx, thisMaxLine.dy),
+        //   Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
+        //   maxValuePaint,
+        // );
       }
     }
   }
@@ -262,7 +277,10 @@ class BarPainter extends CustomPainter {
     if (thisUpperBaseline != null) {
       final TextSpan axisTextSpan = TextSpan(
         text: upperLine?.toStringAsFixed(1),
-        style: textStyle,
+        style: textStyle.copyWith(
+              color: ContrastColorCalculate()
+                  .determinemonochromeFontColorFromBackground(
+                      backgroundColor: limitLinePaint.color)),
       );
       final axisTextPainter = TextPainter(
         text: axisTextSpan,
@@ -298,12 +316,23 @@ class BarPainter extends CustomPainter {
         Offset(areaDrawingBottomRight.dx + 8,
             thisUpperBaseline.dy - axisTextPainter.height / 2),
       );
+      // drawing upper limit line
+      double dottedLineWidth = 1, dottedLineSpace = 1;
+      double startX = areaDrawingAreaTopLeft.dx;
+      while (startX < areaDrawingBottomRight.dx) {
+        canvas.drawLine(
+          Offset(startX, thisUpperBaseline.dy),
+          Offset(startX + dottedLineWidth, thisUpperBaseline.dy),
+          limitLinePaint,
+        );
+        startX += dottedLineWidth + dottedLineSpace;
+      }
 
-      canvas.drawLine(
-        Offset(areaDrawingAreaTopLeft.dx, thisUpperBaseline.dy),
-        Offset(areaDrawingBottomRight.dx, thisUpperBaseline.dy),
-        limitLinePaint,
-      );
+      // canvas.drawLine(
+      //   Offset(areaDrawingAreaTopLeft.dx, thisUpperBaseline.dy),
+      //   Offset(areaDrawingBottomRight.dx, thisUpperBaseline.dy),
+      //   limitLinePaint,
+      // );
 
       canvas.drawRRect(
         RRect.fromRectAndRadius(
@@ -536,7 +565,7 @@ class BarPainter extends CustomPainter {
                 drawingAreaSize.height -
                 (upperLine! - yMin) * yUnit)
         : null;
-    log('yunit: $yUnit');
+
     maxBaseLine = maxLine != null
         ? ChartBaseline(
             dy: dataDrawingAreaTopLeft.dy +
@@ -590,14 +619,6 @@ class BarPainter extends CustomPainter {
         .toList();
 
     final returnEntities = offsetLeft + offsetRight;
-
-    log('${returnEntities.length}');
-    log('(${entitiesOnLeft + entitiesOnRight})');
-    log('ymax: $yMax');
-    log('ymin: $yMin');
-
-    log('${dataDrawingAreaTopLeft}');
-    log('${dataDrawingAreaBottomRight}');
 
     return returnEntities;
   }
