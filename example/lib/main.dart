@@ -69,6 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: LineChart(
+                                  style: ChartStyle(
+                                    lineStyle: DataStyle(
+                                      underMaskColor: Colors.orange,
+                                      maxValueColor: Colors.green[500],
+                                    ),
+                                  ),
                                   defalutDisplayRange: 100,
                                   defaultMiddleDisplayIndex:
                                       simulatedItemNumber - 1,
@@ -162,7 +168,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     String text = dateTime.minute == 0
                                         ? '${dateTime.hour}時'
                                         : '${dateTime.hour >= 10 ? '${dateTime.hour}' : '0${dateTime.hour}'}:${dateTime.minute >= 10 ? '${dateTime.minute}' : '0${dateTime.minute}'}';
-                                    return value==0?'': dateTime.minute == 0 ? text : '';
+                                    return value == 0
+                                        ? ''
+                                        : dateTime.minute == 0
+                                            ? text
+                                            : '';
                                   },
                                   yAxisFormatter: (value) {
                                     return value.toStringAsFixed(1);

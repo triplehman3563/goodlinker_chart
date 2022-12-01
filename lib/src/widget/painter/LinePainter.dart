@@ -7,6 +7,7 @@ import 'package:goodlinker_chart/src/entry/CartesianEntry.dart';
 import 'package:goodlinker_chart/src/entry/LineChartEntry.dart';
 import 'package:goodlinker_chart/src/style/ChartStyle.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
+import 'package:goodlinker_chart/src/usecases/contrast_color_calculate.dart';
 
 class LinePainter extends CustomPainter {
   final ChartStyle style;
@@ -78,15 +79,11 @@ class LinePainter extends CustomPainter {
       _drawData(canvas: canvas, size: size);
       _drawDisplayingDataLine(canvas: canvas, size: size);
     } catch (err, s) {
-      log(s.toString());
       rethrow;
     }
   }
 
-  void _drawData({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawData({required Canvas canvas, required Size size}) {
     Paint normalDataPaint = Paint()
       ..color = style.lineStyle.normalColor
       ..strokeWidth = style.lineStyle.dataLineWidth;
@@ -245,10 +242,7 @@ class LinePainter extends CustomPainter {
     });
   }
 
-  void _drawExtremeValue({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawExtremeValue({required Canvas canvas, required Size size}) {
     Paint maxValuePaint = Paint()
       ..color = style.lineStyle.maxValueColor
       ..strokeWidth = style.lineStyle.dataLineWidth;
@@ -257,7 +251,7 @@ class LinePainter extends CustomPainter {
       ..color = style.lineStyle.minValueColor
       ..strokeWidth = style.lineStyle.dataLineWidth;
 
-    final textStyle = TextStyle(
+    TextStyle textStyle = TextStyle(
       color: Colors.white,
       fontSize: style.xAxisStyle.axisLabelFontSize,
       // fontSize: 14,
@@ -268,7 +262,8 @@ class LinePainter extends CustomPainter {
       if (thisMaxLine.dy <= size.height && thisMaxLine.dy >= 0) {
         final TextSpan axisTextSpan = TextSpan(
           text: maxLine?.toStringAsFixed(1),
-          style: textStyle,
+          style: textStyle.copyWith(color: ContrastColorCalculate()
+                  .determinemonochromeFontColorFromBackground(backgroundColor: maxValuePaint.color)),
         );
         final axisTextPainter = TextPainter(
           text: axisTextSpan,
@@ -278,6 +273,7 @@ class LinePainter extends CustomPainter {
           minWidth: 0,
           maxWidth: size.width,
         );
+        // drawing top extreme value y label on y axis
         canvas.drawLine(
           Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
           Offset(areaDrawingBottomRight.dx + 5, thisMaxLine.dy),
@@ -303,12 +299,22 @@ class LinePainter extends CustomPainter {
           Offset(areaDrawingBottomRight.dx + 8,
               thisMaxLine.dy - axisTextPainter.height / 2),
         );
-
-        canvas.drawLine(
-          Offset(areaDrawingAreaTopLeft.dx, thisMaxLine.dy),
-          Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
-          maxValuePaint,
-        );
+        // drawing top extreme value line
+        double dottedLineWidth = 1, dottedLineSpace = 1;
+        double startX = areaDrawingAreaTopLeft.dx;
+        while (startX < areaDrawingBottomRight.dx) {
+          canvas.drawLine(
+            Offset(startX, thisMaxLine.dy),
+            Offset(startX + dottedLineWidth, thisMaxLine.dy),
+            maxValuePaint,
+          );
+          startX += dottedLineWidth + dottedLineSpace;
+        }
+        // canvas.drawLine(
+        //   Offset(areaDrawingAreaTopLeft.dx, thisMaxLine.dy),
+        //   Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
+        //   maxValuePaint,
+        // );
       }
     }
     ChartBaseline? thisMinLine = minBaseLine;
@@ -316,7 +322,10 @@ class LinePainter extends CustomPainter {
       if (thisMinLine.dy <= size.height && thisMinLine.dy >= 0) {
         final TextSpan axisTextSpan = TextSpan(
           text: minLine?.toStringAsFixed(1),
-          style: textStyle,
+          style: textStyle.copyWith(
+              color: ContrastColorCalculate()
+                  .determinemonochromeFontColorFromBackground(
+                      backgroundColor: minValuePaint.color)),
         );
         final axisTextPainter = TextPainter(
           text: axisTextSpan,
@@ -326,6 +335,8 @@ class LinePainter extends CustomPainter {
           minWidth: 0,
           maxWidth: size.width,
         );
+        // drawing bottom extreme value y label on y axis
+
         canvas.drawLine(
           Offset(areaDrawingBottomRight.dx, thisMinLine.dy),
           Offset(areaDrawingBottomRight.dx + 5, thisMinLine.dy),
@@ -351,20 +362,29 @@ class LinePainter extends CustomPainter {
           Offset(areaDrawingBottomRight.dx + 8,
               thisMinLine.dy - axisTextPainter.height / 2),
         );
+        // drawing bottom extreme value line
 
-        canvas.drawLine(
-          Offset(areaDrawingAreaTopLeft.dx, thisMinLine.dy),
-          Offset(areaDrawingBottomRight.dx, thisMinLine.dy),
-          minValuePaint,
-        );
+        double dottedLineWidth = 1, dottedLineSpace = 1;
+        double startX = areaDrawingAreaTopLeft.dx;
+        while (startX < areaDrawingBottomRight.dx) {
+          canvas.drawLine(
+            Offset(startX, thisMinLine.dy),
+            Offset(startX + dottedLineWidth, thisMinLine.dy),
+            maxValuePaint,
+          );
+          startX += dottedLineWidth + dottedLineSpace;
+        }
+
+        // canvas.drawLine(
+        //   Offset(areaDrawingAreaTopLeft.dx, thisMinLine.dy),
+        //   Offset(areaDrawingBottomRight.dx, thisMinLine.dy),
+        //   minValuePaint,
+        // );
       }
     }
   }
 
-  void _drawArea({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawArea({required Canvas canvas, required Size size}) {
     Paint normalAreaPaint = Paint()
       ..color = style.lineStyle.normalColor.withAlpha(25);
     Paint maskAreaPaint = Paint()
@@ -397,11 +417,6 @@ class LinePainter extends CustomPainter {
         normalAreaPaint,
       );
     } catch (err, s) {
-      log('x1: ${areaDrawingAreaTopLeft.dx}');
-      log('y1: ${upperBaseline != null && upperBaseline!.dy != double.nan ? upperBaseline!.dy : 0}');
-      log('y1: ${upperBaseline!.dy} == ${double.nan}? ${upperBaseline!.dy.isNaN}');
-      log('x2: ${areaDrawingBottomRight.dx}');
-      log('y2: ${lowerBaseline != null && upperBaseline!.dy != double.nan ? lowerBaseline!.dy : 0}');
       rethrow;
     }
 
@@ -409,7 +424,10 @@ class LinePainter extends CustomPainter {
     if (thisUpperBaseline != null && !thisUpperBaseline!.dy.isNaN) {
       final TextSpan axisTextSpan = TextSpan(
         text: upperLine?.toStringAsFixed(1),
-        style: textStyle,
+        style: textStyle.copyWith(
+              color: ContrastColorCalculate()
+                  .determinemonochromeFontColorFromBackground(
+                      backgroundColor: limitLinePaint.color)),
       );
       final axisTextPainter = TextPainter(
         text: axisTextSpan,
@@ -444,12 +462,22 @@ class LinePainter extends CustomPainter {
         Offset(areaDrawingBottomRight.dx + 8,
             thisUpperBaseline.dy - axisTextPainter.height / 2),
       );
-
-      canvas.drawLine(
-        Offset(areaDrawingAreaTopLeft.dx, thisUpperBaseline.dy),
-        Offset(areaDrawingBottomRight.dx, thisUpperBaseline.dy),
-        limitLinePaint,
-      );
+      // drawing upper base line
+      double dottedLineWidth = 1, dottedLineSpace = 1;
+      double startX = areaDrawingAreaTopLeft.dx;
+      while (startX < areaDrawingBottomRight.dx) {
+        canvas.drawLine(
+          Offset(startX, thisUpperBaseline.dy),
+          Offset(startX + dottedLineWidth, thisUpperBaseline.dy),
+          limitLinePaint,
+        );
+        startX += dottedLineWidth + dottedLineSpace;
+      }
+      // canvas.drawLine(
+      //   Offset(areaDrawingAreaTopLeft.dx, thisUpperBaseline.dy),
+      //   Offset(areaDrawingBottomRight.dx, thisUpperBaseline.dy),
+      //   limitLinePaint,
+      // );
 
       canvas.drawRRect(
         RRect.fromRectAndCorners(
@@ -467,7 +495,10 @@ class LinePainter extends CustomPainter {
     if (thisLowerBaseline != null && !thisLowerBaseline!.dy.isNaN) {
       final TextSpan axisTextSpan = TextSpan(
         text: lowerline?.toStringAsFixed(1),
-        style: textStyle,
+        style: textStyle.copyWith(
+              color: ContrastColorCalculate()
+                  .determinemonochromeFontColorFromBackground(
+                      backgroundColor: limitLinePaint.color)),
       );
       final axisTextPainter = TextPainter(
         text: axisTextSpan,
@@ -504,12 +535,23 @@ class LinePainter extends CustomPainter {
           thisLowerBaseline.dy - axisTextPainter.height / 2,
         ),
       );
+      // drawing lower base line
+      double dottedLineWidth = 1, dottedLineSpace = 1;
+      double startX = areaDrawingAreaTopLeft.dx;
+      while (startX < areaDrawingBottomRight.dx) {
+        canvas.drawLine(
+          Offset(startX, thisLowerBaseline.dy),
+          Offset(startX + dottedLineWidth, thisLowerBaseline.dy),
+          limitLinePaint,
+        );
+        startX += dottedLineWidth + dottedLineSpace;
+      }
 
-      canvas.drawLine(
-        Offset(areaDrawingAreaTopLeft.dx, thisLowerBaseline.dy),
-        Offset(areaDrawingBottomRight.dx, thisLowerBaseline.dy),
-        limitLinePaint,
-      );
+      // canvas.drawLine(
+      //   Offset(areaDrawingAreaTopLeft.dx, thisLowerBaseline.dy),
+      //   Offset(areaDrawingBottomRight.dx, thisLowerBaseline.dy),
+      //   limitLinePaint,
+      // );
       canvas.drawRect(
         Rect.fromPoints(
           Offset(areaDrawingAreaTopLeft.dx, thisLowerBaseline.dy),
@@ -520,10 +562,7 @@ class LinePainter extends CustomPainter {
     }
   }
 
-  void _drawYAxis({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawYAxis({required Canvas canvas, required Size size}) {
     final textStyle = TextStyle(
       color: Colors.black,
       fontSize: style.xAxisStyle.axisLabelFontSize,
@@ -580,10 +619,7 @@ class LinePainter extends CustomPainter {
     }
   }
 
-  void _drawXAxis({
-    required Canvas canvas,
-    required Size size,
-  }) {
+  void _drawXAxis({required Canvas canvas, required Size size}) {
     canvas.drawRRect(
       RRect.fromRectAndCorners(
         Rect.fromPoints(
@@ -615,14 +651,13 @@ class LinePainter extends CustomPainter {
         Paint()..color = style.xAxisStyle.axisBorderLineColor);
   }
 
-  _LastLabel _drawXAxisLabel({
-    required Canvas canvas,
-    required Size size,
-    required int index,
-    required Offset src,
-    required Offset tar,
-    required double xData,
-  }) {
+  _LastLabel _drawXAxisLabel(
+      {required Canvas canvas,
+      required Size size,
+      required int index,
+      required Offset src,
+      required Offset tar,
+      required double xData}) {
     final xAxisHeight = style.xAxisStyle.axisLabelFontSize + 2;
 
     final textStyle = TextStyle(
