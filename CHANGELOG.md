@@ -1,3 +1,6 @@
+## 0.0.16
+    add adaptive font color and dotted line style.
+
 ## 0.0.15
     remove minimal height for BarChart.
 
