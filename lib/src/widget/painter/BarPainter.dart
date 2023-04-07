@@ -87,8 +87,8 @@ class BarPainter extends CustomPainter {
     Paint underMaskDataPaint = Paint()
       ..color = style.lineStyle.maskedColor
       ..strokeWidth = style.lineStyle.dataLineWidth;
-    final double segementWidth =
-        drawingAreaSize.width / displayingEntities.length;
+    final double segementWidth = 100;
+    // drawingAreaSize.width / displayingEntities.length;
 
     double widthRemain = 0;
     displayingEntities.asMap().forEach((index, entry) {
@@ -102,12 +102,10 @@ class BarPainter extends CustomPainter {
         if (barTopLeft < dataDrawingAreaTopLeft &&
             barBottomRight < dataDrawingAreaTopLeft) {
           // don't draw
-
         }
         if (barTopLeft < dataDrawingAreaTopLeft &&
             barBottomRight >= dataDrawingAreaTopLeft) {
           // crossing drawing border left top out->in
-
         }
 
         if (barTopLeft >= dataDrawingAreaTopLeft &&
@@ -134,12 +132,10 @@ class BarPainter extends CustomPainter {
         if (barTopLeft <= dataDrawingAreaBottomRight &&
             barBottomRight > dataDrawingAreaBottomRight) {
           // crossing drawing border right bottom in->out
-
         }
         if (barTopLeft > dataDrawingAreaBottomRight &&
             barBottomRight > dataDrawingAreaBottomRight) {
           // don't draw
-
         }
 
         if (widthRemain >= 0) {
@@ -278,9 +274,9 @@ class BarPainter extends CustomPainter {
       final TextSpan axisTextSpan = TextSpan(
         text: upperLine?.toStringAsFixed(1),
         style: textStyle.copyWith(
-              color: ContrastColorCalculate()
-                  .determinemonochromeFontColorFromBackground(
-                      backgroundColor: limitLinePaint.color)),
+            color: ContrastColorCalculate()
+                .determinemonochromeFontColorFromBackground(
+                    backgroundColor: limitLinePaint.color)),
       );
       final axisTextPainter = TextPainter(
         text: axisTextSpan,
@@ -517,6 +513,7 @@ class BarPainter extends CustomPainter {
           : (currentMiddleDisplayIndex - currentDisplayRange / 2).ceil(),
       currentMiddleDisplayIndex,
     );
+
     entitiesOnLeft.insertAll(
         0,
         Iterable<CartesianEntry>.generate(
@@ -538,7 +535,7 @@ class BarPainter extends CustomPainter {
 
     final List<CartesianEntry?> displayingEntities =
         entitiesOnLeft + entitiesOnRight;
-
+    log(displayingEntities.toString());
     List<double?> yDatas = displayingEntities.map((e) => e?.y).toList();
     yDatas.addAll([upperLine]);
     maxYLabelWidth = _calMaxYAxisLabelWidth(size: size, yDatas: yDatas);
@@ -576,7 +573,7 @@ class BarPainter extends CustomPainter {
     final List<LineChartEntry> offsetLeft = entitiesOnLeft
         .asMap()
         .map((index, entry) {
-          final disFromMid = (entitiesOnLeft.length - index - 1) * xUnit;
+          final disFromMid = (entitiesOnLeft.length - index) * xUnit;
           final dx = dataDrawingAreaTopLeft.dx + middleXPos - disFromMid;
           final dy = entry?.y == null
               ? null
