@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:goodlinker_chart/src/entry/ChartRuleLine.dart';
 import 'package:goodlinker_chart/src/entry/CartesianData.dart';
@@ -5,6 +7,7 @@ import 'package:goodlinker_chart/src/entry/CartesianEntry.dart';
 import 'package:goodlinker_chart/src/entry/LineChartEntry.dart';
 import 'package:goodlinker_chart/src/style/ChartStyle.dart';
 import 'package:goodlinker_chart/src/Utils.dart';
+import 'package:goodlinker_chart/src/usecases/contrast_color_calculate.dart';
 
 class BarPainter extends CustomPainter {
   final ChartStyle style;
@@ -18,7 +21,7 @@ class BarPainter extends CustomPainter {
   final Offset lastTapLocation;
   final String Function(double value)? xAxisFormatter;
   final String Function(double value)? yAxisFormatter;
-  void Function(LineChartEntry entry, int selectIndex) dataSelectionCallback;
+  void Function(LineChartEntry? entry, int selectIndex) dataSelectionCallback;
   BarPainter({
     required this.style,
     required this.data,
@@ -36,7 +39,7 @@ class BarPainter extends CustomPainter {
   late List<LineChartEntry> displayingEntities;
   late double maxYLabelWidth;
   late Offset dataDrawingAreaTopLeft;
-  late Offset dataDrawingBottomRight;
+  late Offset dataDrawingAreaBottomRight;
   late Offset areaDrawingAreaTopLeft;
   late Offset areaDrawingBottomRight;
 
@@ -45,10 +48,10 @@ class BarPainter extends CustomPainter {
   late double yMin;
   late ChartBaseline? upperBaseline;
   late ChartBaseline? maxBaseLine;
+  late double minimalBarHeight;
 
   @override
   bool shouldRepaint(BarPainter oldDelegate) {
-
     return data.entities.length != oldDelegate.data.entities.length ||
         currentMiddleDisplayIndex != oldDelegate.currentMiddleDisplayIndex ||
         currentDisplayRange != oldDelegate.currentDisplayRange ||
@@ -59,14 +62,19 @@ class BarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // _drawDebugInfo(canvas: canvas, size: size);
-    displayingEntities = _calDisplayingEntities(size);
-    _handleTap(canvas: canvas, size: size);
-    _drawYAxis(canvas: canvas, size: size);
-    _drawXAxis(canvas: canvas, size: size);
-    _drawArea(canvas: canvas, size: size);
-    _drawExtremeValue(canvas: canvas, size: size);
-    _drawData(canvas: canvas, size: size);
-    _drawDataSelectionLine(canvas: canvas, size: size);
+    try {
+      displayingEntities = _calDisplayingEntities(size);
+      _handleTap(canvas: canvas, size: size);
+      _drawYAxis(canvas: canvas, size: size);
+      _drawXAxis(canvas: canvas, size: size);
+      _drawArea(canvas: canvas, size: size);
+      _drawExtremeValue(canvas: canvas, size: size);
+      _drawData(canvas: canvas, size: size);
+      _drawDataSelectionLine(canvas: canvas, size: size);
+    } catch (err, s) {
+      print(s);
+      rethrow;
+    }
   }
 
   void _drawData({
@@ -79,33 +87,31 @@ class BarPainter extends CustomPainter {
     Paint underMaskDataPaint = Paint()
       ..color = style.lineStyle.maskedColor
       ..strokeWidth = style.lineStyle.dataLineWidth;
-    final double segementWidth =
-        drawingAreaSize.width / displayingEntities.length;
+    final double segementWidth = 100;
+    // drawingAreaSize.width / displayingEntities.length;
 
     double widthRemain = 0;
     displayingEntities.asMap().forEach((index, entry) {
-      if (entry.y != null) {
+      if (entry.y != null || entry.y != double.nan) {
         final pointWidth = segementWidth;
 
         Offset barTopLeft = Offset(entry.x - segementWidth / 2, entry.y ?? 0);
         Offset barBottomRight =
-            Offset(entry.x + segementWidth / 2, dataDrawingBottomRight.dy);
+            Offset(entry.x + segementWidth / 2, dataDrawingAreaBottomRight.dy);
 
         if (barTopLeft < dataDrawingAreaTopLeft &&
             barBottomRight < dataDrawingAreaTopLeft) {
           // don't draw
-
         }
         if (barTopLeft < dataDrawingAreaTopLeft &&
             barBottomRight >= dataDrawingAreaTopLeft) {
           // crossing drawing border left top out->in
-
         }
 
         if (barTopLeft >= dataDrawingAreaTopLeft &&
             barBottomRight >= dataDrawingAreaTopLeft &&
-            barTopLeft <= dataDrawingBottomRight &&
-            barBottomRight <= dataDrawingBottomRight) {
+            barTopLeft <= dataDrawingAreaBottomRight &&
+            barBottomRight <= dataDrawingAreaBottomRight) {
           canvas.drawRect(
             Rect.fromPoints(barTopLeft, barBottomRight),
             normalDataPaint,
@@ -123,15 +129,13 @@ class BarPainter extends CustomPainter {
             }
           }
         }
-        if (barTopLeft <= dataDrawingBottomRight &&
-            barBottomRight > dataDrawingBottomRight) {
+        if (barTopLeft <= dataDrawingAreaBottomRight &&
+            barBottomRight > dataDrawingAreaBottomRight) {
           // crossing drawing border right bottom in->out
-
         }
-        if (barTopLeft > dataDrawingBottomRight &&
-            barBottomRight > dataDrawingBottomRight) {
+        if (barTopLeft > dataDrawingAreaBottomRight &&
+            barBottomRight > dataDrawingAreaBottomRight) {
           // don't draw
-
         }
 
         if (widthRemain >= 0) {
@@ -173,7 +177,10 @@ class BarPainter extends CustomPainter {
       if (thisMaxLine.dy <= size.height && thisMaxLine.dy >= 0) {
         final TextSpan axisTextSpan = TextSpan(
           text: maxLine?.toStringAsFixed(1),
-          style: textStyle,
+          style: textStyle.copyWith(
+              color: ContrastColorCalculate()
+                  .determinemonochromeFontColorFromBackground(
+                      backgroundColor: maxValuePaint.color)),
         );
         final axisTextPainter = TextPainter(
           text: axisTextSpan,
@@ -183,6 +190,7 @@ class BarPainter extends CustomPainter {
           minWidth: 0,
           maxWidth: size.width,
         );
+        // drawing top extreme value label on y axis
         canvas.drawLine(
           Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
           Offset(areaDrawingBottomRight.dx + 5, thisMaxLine.dy),
@@ -208,12 +216,22 @@ class BarPainter extends CustomPainter {
           Offset(areaDrawingBottomRight.dx + 8,
               thisMaxLine.dy - axisTextPainter.height / 2),
         );
-
-        canvas.drawLine(
-          Offset(areaDrawingAreaTopLeft.dx, thisMaxLine.dy),
-          Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
-          maxValuePaint,
-        );
+        // drawing top extreme value line
+        double dottedLineWidth = 1, dottedLineSpace = 1;
+        double startX = areaDrawingAreaTopLeft.dx;
+        while (startX < areaDrawingBottomRight.dx) {
+          canvas.drawLine(
+            Offset(startX, thisMaxLine.dy),
+            Offset(startX + dottedLineWidth, thisMaxLine.dy),
+            maxValuePaint,
+          );
+          startX += dottedLineWidth + dottedLineSpace;
+        }
+        // canvas.drawLine(
+        //   Offset(areaDrawingAreaTopLeft.dx, thisMaxLine.dy),
+        //   Offset(areaDrawingBottomRight.dx, thisMaxLine.dy),
+        //   maxValuePaint,
+        // );
       }
     }
   }
@@ -234,21 +252,31 @@ class BarPainter extends CustomPainter {
       fontSize: style.xAxisStyle.axisLabelFontSize,
       // fontSize: 14,
     );
-
-    canvas.drawRect(
-      Rect.fromPoints(
-        Offset(areaDrawingAreaTopLeft.dx,
-            upperBaseline != null ? upperBaseline!.dy : 0),
-        areaDrawingBottomRight,
-      ),
-      normalAreaPaint,
-    );
+    try {
+      canvas.drawRect(
+        Rect.fromPoints(
+          Offset(areaDrawingAreaTopLeft.dx,
+              upperBaseline != null ? upperBaseline!.dy : 0),
+          areaDrawingBottomRight,
+        ),
+        normalAreaPaint,
+      );
+    } catch (err) {
+      print(
+          '${Offset(areaDrawingAreaTopLeft.dx, upperBaseline != null ? upperBaseline!.dy : 0)}  ${areaDrawingBottomRight}');
+      print(
+          '${this.upperLine} ${this.yMin}  ${this.dataDrawingAreaTopLeft.dy}');
+      rethrow;
+    }
 
     ChartBaseline? thisUpperBaseline = upperBaseline;
     if (thisUpperBaseline != null) {
       final TextSpan axisTextSpan = TextSpan(
         text: upperLine?.toStringAsFixed(1),
-        style: textStyle,
+        style: textStyle.copyWith(
+            color: ContrastColorCalculate()
+                .determinemonochromeFontColorFromBackground(
+                    backgroundColor: limitLinePaint.color)),
       );
       final axisTextPainter = TextPainter(
         text: axisTextSpan,
@@ -284,12 +312,23 @@ class BarPainter extends CustomPainter {
         Offset(areaDrawingBottomRight.dx + 8,
             thisUpperBaseline.dy - axisTextPainter.height / 2),
       );
+      // drawing upper limit line
+      double dottedLineWidth = 1, dottedLineSpace = 1;
+      double startX = areaDrawingAreaTopLeft.dx;
+      while (startX < areaDrawingBottomRight.dx) {
+        canvas.drawLine(
+          Offset(startX, thisUpperBaseline.dy),
+          Offset(startX + dottedLineWidth, thisUpperBaseline.dy),
+          limitLinePaint,
+        );
+        startX += dottedLineWidth + dottedLineSpace;
+      }
 
-      canvas.drawLine(
-        Offset(areaDrawingAreaTopLeft.dx, thisUpperBaseline.dy),
-        Offset(areaDrawingBottomRight.dx, thisUpperBaseline.dy),
-        limitLinePaint,
-      );
+      // canvas.drawLine(
+      //   Offset(areaDrawingAreaTopLeft.dx, thisUpperBaseline.dy),
+      //   Offset(areaDrawingBottomRight.dx, thisUpperBaseline.dy),
+      //   limitLinePaint,
+      // );
 
       canvas.drawRRect(
         RRect.fromRectAndRadius(
@@ -347,19 +386,24 @@ class BarPainter extends CustomPainter {
         maxWidth: maxYLabelWidth,
       );
       canvas.drawLine(
-        Offset(areaDrawingBottomRight.dx,
-            dataDrawingBottomRight.dy - i * stepHeight),
-        Offset(areaDrawingBottomRight.dx + 5,
-            dataDrawingBottomRight.dy - i * stepHeight),
+        Offset(
+          areaDrawingBottomRight.dx,
+          dataDrawingAreaBottomRight.dy - i * stepHeight - minimalBarHeight,
+        ),
+        Offset(
+          areaDrawingBottomRight.dx + 5,
+          dataDrawingAreaBottomRight.dy - i * stepHeight - minimalBarHeight,
+        ),
         Paint(),
       );
       axisTextPainter.paint(
         canvas,
         Offset(
             areaDrawingBottomRight.dx + 8,
-            dataDrawingBottomRight.dy -
+            dataDrawingAreaBottomRight.dy -
                 i * stepHeight -
-                axisTextPainter.height / 2),
+                axisTextPainter.height / 2 -
+                minimalBarHeight),
       );
     }
   }
@@ -457,6 +501,8 @@ class BarPainter extends CustomPainter {
               .round()
               .clamp(0, displayingEntities.length - 1);
       dataSelectionCallback(displayingEntities[selectIndex], selectIndex);
+    } else {
+      dataSelectionCallback(null, 0);
     }
   }
 
@@ -467,6 +513,7 @@ class BarPainter extends CustomPainter {
           : (currentMiddleDisplayIndex - currentDisplayRange / 2).ceil(),
       currentMiddleDisplayIndex,
     );
+
     entitiesOnLeft.insertAll(
         0,
         Iterable<CartesianEntry>.generate(
@@ -488,24 +535,26 @@ class BarPainter extends CustomPainter {
 
     final List<CartesianEntry?> displayingEntities =
         entitiesOnLeft + entitiesOnRight;
-
+    log(displayingEntities.toString());
     List<double?> yDatas = displayingEntities.map((e) => e?.y).toList();
     yDatas.addAll([upperLine]);
     maxYLabelWidth = _calMaxYAxisLabelWidth(size: size, yDatas: yDatas);
     _calDrawingArea(size: size);
-
+    minimalBarHeight = 0;
     drawingAreaSize = Size(
-      dataDrawingBottomRight.dx - dataDrawingAreaTopLeft.dx,
-      dataDrawingBottomRight.dy - dataDrawingAreaTopLeft.dy,
+      dataDrawingAreaBottomRight.dx - dataDrawingAreaTopLeft.dx,
+      dataDrawingAreaBottomRight.dy -
+          dataDrawingAreaTopLeft.dy -
+          minimalBarHeight,
     );
 
     final finalYDatas = yDatas.whereType<double>().toList();
     yMax = finalYDatas.max();
     yMin = finalYDatas.min();
-    final yRange = yMax - yMin;
+    double yRange = yMax - yMin;
     final middleXPos = drawingAreaSize.width / 2;
     final xUnit = drawingAreaSize.width / displayingEntities.length;
-    final yUnit = drawingAreaSize.height / yRange;
+    final yUnit = (drawingAreaSize.height) / (yRange == 0 ? 10 : yRange);
 
     upperBaseline = upperLine != null
         ? ChartBaseline(
@@ -524,7 +573,7 @@ class BarPainter extends CustomPainter {
     final List<LineChartEntry> offsetLeft = entitiesOnLeft
         .asMap()
         .map((index, entry) {
-          final disFromMid = (entitiesOnLeft.length - index - 1) * xUnit;
+          final disFromMid = (entitiesOnLeft.length - index) * xUnit;
           final dx = dataDrawingAreaTopLeft.dx + middleXPos - disFromMid;
           final dy = entry?.y == null
               ? null
@@ -565,7 +614,10 @@ class BarPainter extends CustomPainter {
         })
         .values
         .toList();
-    return offsetLeft + offsetRight;
+
+    final returnEntities = offsetLeft + offsetRight;
+
+    return returnEntities;
   }
 
   void _calDrawingArea({required Size size}) {
@@ -581,7 +633,7 @@ class BarPainter extends CustomPainter {
       padding.left + 8,
       padding.top + yAxisTopPadding.toDouble(),
     );
-    dataDrawingBottomRight = Offset(
+    dataDrawingAreaBottomRight = Offset(
       availableDrawingArea.width - padding.right - 8,
       availableDrawingArea.height + yAxisTopPadding + yAxisBottomPadding,
     );

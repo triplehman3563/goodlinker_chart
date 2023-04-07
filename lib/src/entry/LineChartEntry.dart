@@ -10,4 +10,9 @@ class LineChartEntry {
     required this.y,
     required this.originEntry,
   });
+  @override
+  String toString() {
+
+    return 'x: $x, y: $y';
+  }
 }

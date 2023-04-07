@@ -19,11 +19,13 @@ class SimpleLineChart extends StatefulWidget {
     bool? enableXScale,
     bool? enableXScroll,
     bool? debug,
+    bool? enableDrawLastDataCircle,
   })  : padding = padding ?? EdgeInsets.fromLTRB(2, 4, 2, 4),
         style = style ?? LineChartStyle(),
         enableXZoom = enableXScale ?? true,
         enableXScroll = enableXScroll ?? true,
         debug = debug ?? false,
+        enableDrawLastDataCircle = enableDrawLastDataCircle ?? false,
         super(key: key);
   final TimestampXAxisDataSet dataSet;
   final LineChartStyle style;
@@ -32,7 +34,7 @@ class SimpleLineChart extends StatefulWidget {
   final bool enableXScroll;
   final String Function(double value)? xAxisFormatter;
   final bool debug;
-
+  final bool enableDrawLastDataCircle;
   @override
   State<SimpleLineChart> createState() => _SimpleLineChartState();
 }
@@ -63,56 +65,41 @@ class _SimpleLineChartState extends State<SimpleLineChart>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return GestureDetector(
-          onDoubleTap: () {
-            setState(() {
-              _diagramOffset = Offset.zero;
-              scale = 1;
-            });
-          },
-          onTapDown: (TapDownDetails details) {
-            ctrl.stop();
-            ctrl.value = 0;
-          },
-          onScaleStart: widget.enableXZoom ? _onScaleStart : null,
-          onScaleUpdate: widget.enableXZoom ? _onScaleUpdate : null,
-          onScaleEnd: widget.enableXZoom ? _onScaleEnd : null,
-          child: AnimatedBuilder(
-            animation: ctrl,
-            builder: (context, w) {
-              final double rightDragDis = 100;
-              final double leftDragDis =
-                  100 + (scale - 1) * constraints.maxWidth;
-              if (_diagramOffset.translate(ctrl.value, 0).dx < -leftDragDis) {
-                _diagramOffset = Offset(-leftDragDis, _diagramOffset.dy);
-                ctrl.stop();
-                ctrl.value = 0;
-              }
-              if (_diagramOffset.translate(ctrl.value, 0).dx > rightDragDis) {
-                _diagramOffset = Offset(rightDragDis, _diagramOffset.dy);
-                ctrl.stop();
-                ctrl.value = 0;
-              }
-              if (_diagramOffset.translate(ctrl.value, 0).dx > -leftDragDis &&
-                  _diagramOffset.translate(ctrl.value, 0).dx < rightDragDis) {
-                _diagramOffset = _diagramOffset.translate(ctrl.value, 0);
-              }
+        return AnimatedBuilder(
+          animation: ctrl,
+          builder: (context, w) {
+            final double rightDragDis = 100;
+            final double leftDragDis = 100 + (scale - 1) * constraints.maxWidth;
+            if (_diagramOffset.translate(ctrl.value, 0).dx < -leftDragDis) {
+              _diagramOffset = Offset(-leftDragDis, _diagramOffset.dy);
+              ctrl.stop();
+              ctrl.value = 0;
+            }
+            if (_diagramOffset.translate(ctrl.value, 0).dx > rightDragDis) {
+              _diagramOffset = Offset(rightDragDis, _diagramOffset.dy);
+              ctrl.stop();
+              ctrl.value = 0;
+            }
+            if (_diagramOffset.translate(ctrl.value, 0).dx > -leftDragDis &&
+                _diagramOffset.translate(ctrl.value, 0).dx < rightDragDis) {
+              _diagramOffset = _diagramOffset.translate(ctrl.value, 0);
+            }
 
-              return TimestampXAxisChartBase(
-                child: CustomPaint(
-                  painter: LineChartPainter(
-                    dataSet: widget.dataSet,
-                    xAxisFormatter: widget.xAxisFormatter,
-                    style: widget.style,
-                    padding: widget.padding,
-                    scale: scale,
-                    diagramOffset: _diagramOffset,
-                    debug: widget.debug,
-                  ),
+            return TimestampXAxisChartBase(
+              child: CustomPaint(
+                painter: LineChartPainter(
+                  dataSet: widget.dataSet,
+                  xAxisFormatter: widget.xAxisFormatter,
+                  style: widget.style,
+                  padding: widget.padding,
+                  scale: scale,
+                  diagramOffset: _diagramOffset,
+                  debug: widget.debug,
+                  enableDrawLastDataCircle: widget.enableDrawLastDataCircle,
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -150,12 +137,14 @@ class LineChartPainter extends CustomPainter {
   final TimestampXAxisDataSet dataSet;
   final EdgeInsets padding;
   final bool debug;
+  final bool enableDrawLastDataCircle;
   LineChartPainter({
     required this.style,
     required this.dataSet,
     required this.padding,
     required this.scale,
     required this.debug,
+    required this.enableDrawLastDataCircle,
     this.diagramOffset,
     this.xAxisFormatter,
   });
@@ -402,6 +391,9 @@ class LineChartPainter extends CustomPainter {
   }
 
   void _drawLastDataCircle({required Canvas canvas, required Size size}) {
+    if (enableDrawLastDataCircle == false) {
+      return;
+    }
     final safeAreaLinePaint = Paint()
       ..color = style.circleStyle.followLineColor
           ? style.lineStyle.normalColor

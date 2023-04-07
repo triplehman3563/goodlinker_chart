@@ -32,8 +32,11 @@ class LineChart extends StatefulWidget {
   final EdgeInsets padding;
 
   /// Callback with the selected data info.
-  final void Function(LineChartEntry entry, int selectIndex)
+  final void Function(LineChartEntry? entry, int selectIndex)
       dataSelectionCallback;
+
+  /// whether to draw a circle on last data offset.
+  final bool enableDrawLastDataCircle;
   LineChart({
     Key? key,
     required this.cartesianDataSet,
@@ -45,6 +48,7 @@ class LineChart extends StatefulWidget {
     int? defaultMiddleDisplayIndex,
     int? defalutDisplayRange,
     bool? scrollable,
+    bool? enableDrawLastDataCircle,
   })  : style = style ?? ChartStyle(),
         padding = padding ?? EdgeInsets.fromLTRB(2, 4, 2, 4),
         defaultMiddleDisplayIndex = defaultMiddleDisplayIndex ??
@@ -52,6 +56,7 @@ class LineChart extends StatefulWidget {
         defalutDisplayRange =
             defalutDisplayRange ?? cartesianDataSet.data.entities.length,
         scrollable = scrollable ?? true,
+        enableDrawLastDataCircle = enableDrawLastDataCircle??false,
         assert(
             (defaultMiddleDisplayIndex ?? 0) <
                 cartesianDataSet.data.entities.length,
@@ -122,6 +127,7 @@ class _LineChartState extends State<LineChart>
                   currentMiddleDisplayIndex: currentMiddleDisplayIndex,
                   currentDisplayRange: currentDisplayRange,
                   dataFeedbackMode: dataFeedbackMode,
+                  enableDrawLastDataCircle: widget.enableDrawLastDataCircle,
                   lastTapLocation: lastTapLocation,
                   xAxisFormatter: widget.xAxisFormatter,
                   yAxisFormatter: widget.yAxisFormatter,

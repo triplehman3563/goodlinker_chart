@@ -32,7 +32,7 @@ class BarChart extends StatefulWidget {
   final EdgeInsets padding;
 
   /// Callback with the selected data info.
-  final void Function(LineChartEntry entry, int selectIndex)
+  final void Function(LineChartEntry? entry, int selectIndex)
       dataSelectionCallback;
   BarChart({
     Key? key,
@@ -124,7 +124,8 @@ class _BarChartState extends State<BarChart>
                   xAxisFormatter: widget.xAxisFormatter,
                   yAxisFormatter: widget.yAxisFormatter,
                   dataSelectionCallback: (entry, selectIndex) {
-                    widget.dataSelectionCallback(entry, selectIndex);
+                     widget.dataSelectionCallback(entry, selectIndex);
+                  
                   }),
             ),
           );

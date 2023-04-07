@@ -5,8 +5,6 @@ import 'package:goodlinker_chart/src/usecases/CalculateOffsets.dart';
 
 import '../../TestData.dart';
 
-
-
 void main() {
   testWidgets('CalculateOffsets ...', (tester) async {
     final result = CalculateOffsets().calculateOffsets(

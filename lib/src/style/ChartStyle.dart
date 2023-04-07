@@ -42,8 +42,8 @@ class DataStyle {
       double? width})
       : normalColor = normalColor ?? Color.fromARGB(255, 7, 206, 63),
         maskedColor = underMaskColor ?? Color.fromARGB(255, 239, 87, 38),
-        maxValueColor = maxValueColor ?? Color.fromARGB(255, 92, 176, 223),
-        minValueColor = minValueColor ?? Color.fromARGB(255, 244, 220, 0),
+        maxValueColor = maxValueColor ?? Color.fromARGB(255, 19 , 114, 167),
+        minValueColor = minValueColor ?? Color.fromARGB(255, 183, 217, 235),
         dataLineWidth = width ?? 1;
 }
 

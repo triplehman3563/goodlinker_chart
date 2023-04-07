@@ -5,7 +5,7 @@ import 'package:goodlinker_chart/src/Utils.dart';
 
 void main() {
   testWidgets('Utils ...', (tester) async {
-    final List<double> doubleTestData = [0, 1, 2, 3, 4];
+    final List<double> doubleTestData = [0, 1, 2, 3, 4, double.nan];
     final List<int> intTestData = [0, 1, 2, 3, 4];
     expect(doubleTestData.max(), 4);
     expect(doubleTestData.min(), 0);
