@@ -1,3 +1,5 @@
+## 0.0.17
+    bugfix: chart entities overlapping.
 ## 0.0.16
     add adaptive font color and dotted line style.
 

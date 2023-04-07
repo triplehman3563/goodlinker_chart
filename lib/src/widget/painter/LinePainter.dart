@@ -801,7 +801,7 @@ class LinePainter extends CustomPainter {
     final List<LineChartEntry> offsetLeft = entitiesOnLeft
         .asMap()
         .map((index, entry) {
-          final disFromMid = (entitiesOnLeft.length - index - 1) * xUnit;
+          final disFromMid = (entitiesOnLeft.length - index ) * xUnit;
           final dx = dataDrawingAreaTopLeft.dx + middleXPos - disFromMid;
           final dy = entry?.y == null
               ? null
